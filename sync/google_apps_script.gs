@@ -21,7 +21,8 @@ const CONFIG = {
   MAX_FILE_BYTES: 12 * 1024 * 1024, // 12 MB
   CALENDAR_DAYS_UPCOMING: 21,
   CALENDAR_DAYS_EXAMS: 75,
-  CALENDAR_KEYWORDS: /HW|WeBWorK|בוחן|מבחן|מועד|הגשה|אלגברה|חדו|מדמ|תעו|אנגלית|Quiz|Midterm|Exam|Assignment|ש"ב|תרגיל|Moodle|GR/i,
+  CALENDAR_KEYWORDS: /HW|WeBWorK|בוחן|מבחן|מועד|הגשה|Quiz|Midterm|Exam|Assignment|ש"ב|תרגיל בית|Moodle|GR/i,
+  CALENDAR_EXCLUDE: /-\s*הרצאה|-\s*תרגול|\bהרצאה\b|\bתרגול\b|סדנה|מעבדה|שעת קבלה/i,
   EXAM_KEYWORDS: /בוחן|מבחן|מועד|Midterm|Exam/i
 };
 
@@ -124,7 +125,7 @@ function syncCalendarEvents(data) {
 
   for (const ev of events) {
     const title = (ev.getTitle() || '').trim();
-    if (!title || !CONFIG.CALENDAR_KEYWORDS.test(title)) continue;
+    if (!title || !CONFIG.CALENDAR_KEYWORDS.test(title) || CONFIG.CALENDAR_EXCLUDE.test(title)) continue;
     const start = ev.getStartTime();
     const dateStr = Utilities.formatDate(start, 'Asia/Jerusalem', 'yyyy-MM-dd');
     const timeStr = ev.isAllDayEvent() ? '' : Utilities.formatDate(start, 'Asia/Jerusalem', 'HH:mm');
@@ -132,7 +133,8 @@ function syncCalendarEvents(data) {
 
     if (CONFIG.EXAM_KEYWORDS.test(title) && !seenExam[title + dateStr]) {
       seenExam[title + dateStr] = true;
-      exams.push({ name: title.slice(0, 32), date: dateStr });
+      const cleanName = title.replace(/\s*\(\d+\)\s*/g, '').trim();
+      exams.push({ name: cleanName, date: dateStr });
     }
     if (start <= endUpcoming) {
       upcoming.push({ title: title, date: dateStr, time: timeStr, course: course });
@@ -227,7 +229,7 @@ function extractStudyItemsWithGemini(item, apiKey) {
     '{',
     '  "theorems": [{ "topic": "שם הנושא הקצר", "kind": "משפט|הגדרה|נוסחה", "title": "כותרת קצרה", "body": "ניסוח מדויק ותמציתי", "trap": "מלכודת בוחן או תנאי קריטי" }],',
     '  "flashcards": [{ "q": "שאלת הבנה/מלכודת קצרה", "a": "תשובה חדה ומדויקת" }],',
-    '  "quizItems": [{ "set": "שם קצר לסט התרגול (למשל: אלגברה HW06 — תלות לינארית)", "q": "טענה או שאלת נכון/לא נכון", "ans": true, "exp": "נימוק קצר או דוגמה נגדית" }]',
+    '  "quizItems": [{ "set": "שם קצר לסט התרגול (למשל: אלגברה HW06 — תלות לינארית)", "q": "טענה או שאלת נכון/לא נכון", "ans": true, "exp": "נימוק קצר בשורה אחת", "deep": "הסבר מעמיק שלב-אחר-שלב עם הוכחה קצרה או דוגמה נגדית מפורטת וטיפ לבוחן" }]',
     '}',
     'כללים:',
     '- עד 5 משפטים/הגדרות חשובים באמת, עד 4 כרטיסיות, עד 4 שאלות תרגול נכון/לא נכון.',
@@ -322,7 +324,8 @@ function mergeExtractedItems(data, extracted, item) {
       set: qz.set || (COURSE_LABELS[item.course] + ' — ' + item.name.replace(/\.[^.]+$/, '')),
       q: qz.q,
       ans: qz.ans,
-      exp: qz.exp
+      exp: qz.exp,
+      deep: qz.deep || ''
     });
     added.quizItems++;
   });
