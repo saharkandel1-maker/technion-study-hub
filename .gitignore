@@ -1,0 +1,4 @@
+# Keep agent/plugin files out of the student web app repository
+AGENTS.md
+docs/
+plugin-backup/
