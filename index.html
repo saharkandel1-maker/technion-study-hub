@@ -647,6 +647,119 @@
     border-radius: 8px;
     font-size: 13px;
   }
+
+  /* Readiness & Syllabus Roadmap */
+  .ready-hero {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .stat-tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+  }
+  .stat-label { font-size: 12.5px; color: var(--muted); margin-bottom: 4px; }
+  .stat-val { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+  .stat-sub { font-size: 12.5px; color: var(--text-soft); margin-top: 4px; }
+
+  .course-ready-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+  .score-ring {
+    min-width: 64px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 19px;
+    font-weight: 800;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .score-high { background: var(--ok-soft); color: var(--ok-text); }
+  .score-mid { background: var(--primary-soft); color: #93c5fd; }
+  body.light .score-mid { color: #1d4ed8; }
+  .score-warn { background: var(--warn-soft); color: var(--warn-text); }
+  .score-low { background: var(--bad-soft); color: var(--bad-text); }
+
+  .lecture-ctrl {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    flex-wrap: wrap;
+  }
+  .lecture-ctrl input[type="range"] {
+    flex: 1;
+    min-width: 140px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+  .metric-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+    color: var(--text-soft);
+  }
+  .metric-chip {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 4px 9px;
+    border-radius: 7px;
+  }
+  .syllabus-list {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+  .syllabus-list.open { display: flex; }
+  .lec-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 11px;
+    border-radius: 8px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .lec-row:hover { border-color: var(--primary); }
+  .lec-row.done {
+    border-color: color-mix(in srgb, var(--ok) 40%, var(--border));
+    background: color-mix(in srgb, var(--ok) 7%, var(--surface-2));
+  }
+  .lec-row.midterm {
+    border-right: 3px solid var(--warn);
+  }
+  .lec-row.now-week {
+    border-right: 3px solid var(--primary);
+  }
+  .lec-num {
+    font-weight: 700;
+    color: var(--muted);
+    min-width: 58px;
+    font-size: 12px;
+  }
+  .lec-row.done .lec-num { color: var(--ok-text); }
 </style>
 </head>
 <body>
@@ -669,12 +782,13 @@
 
 <div class="nav-wrap">
   <nav role="tablist">
-    <button class="tab-btn active" role="tab" onclick="openTab('bank', this)">📚 בנק משפטים</button>
-    <button class="tab-btn" role="tab" onclick="openTab('alg', this)">🎯 תרגול ושאלות</button>
-    <button class="tab-btn" role="tab" onclick="openTab('cards', this)">🃏 כרטיסיות אמצע</button>
-    <button class="tab-btn" role="tab" onclick="openTab('ww', this)">⚡ בודק WeBWorK</button>
-    <button class="tab-btn" role="tab" onclick="openTab('focus', this)">⏱️ פומודורו וטעויות</button>
-    <button class="tab-btn" role="tab" onclick="openTab('hub', this)">🚀 קישורים מהירים</button>
+    <button class="tab-btn active" role="tab" data-tab="ready" onclick="openTab('ready', this)">📊 מוכנות ומפת סמסטר</button>
+    <button class="tab-btn" role="tab" data-tab="bank" onclick="openTab('bank', this)">📚 בנק משפטים</button>
+    <button class="tab-btn" role="tab" data-tab="alg" onclick="openTab('alg', this)">🎯 תרגול ושאלות</button>
+    <button class="tab-btn" role="tab" data-tab="cards" onclick="openTab('cards', this)">🃏 כרטיסיות אמצע</button>
+    <button class="tab-btn" role="tab" data-tab="ww" onclick="openTab('ww', this)">⚡ בודק WeBWorK</button>
+    <button class="tab-btn" role="tab" data-tab="focus" onclick="openTab('focus', this)">⏱️ פומודורו וטעויות</button>
+    <button class="tab-btn" role="tab" data-tab="hub" onclick="openTab('hub', this)">🚀 קישורים מהירים</button>
   </nav>
 </div>
 
@@ -687,8 +801,25 @@
     <div class="upcoming-list" id="upcomingList"></div>
   </section>
 
+  <!-- TAB 0: EXAM READINESS & FULL SEMESTER ROADMAP -->
+  <section id="tab-ready" class="tab active">
+    <div class="section-header">
+      <div>
+        <h2>הערכת רמה, מוכנות לבחנים ומפת סמסטר</h2>
+        <p>סמן באיזו הרצאה אתה בכל קורס — הציון משוקלל בזמן אמת מהרצאות, בנק המשפטים, דיוק בתרגולים וכרטיסיות</p>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn btn-sm" onclick="resetQuizStats()">↺ אפס סטטיסטיקת תרגול</button>
+      </div>
+    </div>
+
+    <div class="ready-hero" id="readyHero"></div>
+    <div id="weakSpotsBox" style="margin-bottom:18px;"></div>
+    <div class="grid grid-2" id="readyCoursesGrid"></div>
+  </section>
+
   <!-- TAB 1: THEOREM & DEFINITION BANK -->
-  <section id="tab-bank" class="tab active">
+  <section id="tab-bank" class="tab">
     <div class="section-header">
       <div>
         <h2>בנק משפטים, הגדרות ונוסחאות</h2>
@@ -1431,6 +1562,7 @@ function toggleBankDone(id) {
   bankDone[id] = !bankDone[id];
   storeSet('tech_bank_done', JSON.stringify(bankDone));
   renderBank();
+  if (typeof renderReadiness === 'function') renderReadiness();
 }
 function renderBank() {
   const q = document.getElementById('bankSearch').value.trim().toLowerCase();
@@ -2212,6 +2344,7 @@ function answerQuiz(choice) {
   const cur = quizData[qIdx];
   const ok = (choice === cur.ans);
   if (ok) qScore++;
+  if (typeof recordQuizAttempt === 'function') recordQuizAttempt(cur, ok);
   document.getElementById('qScore').textContent = qScore;
   document.getElementById('qTotal').textContent = qTotal;
 
@@ -2477,12 +2610,13 @@ function markCard(ok) {
   if (!currentDeck.length) return;
   mastery[currentDeck[cardIdx].id] = ok;
   storeSet('tech_mastery', JSON.stringify(mastery));
+  if (typeof renderReadiness === 'function') renderReadiness();
   if (onlyUnmastered && ok) { loadDeck(); return; }
   nextCard();
 }
 function nextCard() { if (!currentDeck.length) return; cardIdx = (cardIdx + 1) % currentDeck.length; flipped = false; renderCard(); }
 function prevCard() { if (!currentDeck.length) return; cardIdx = (cardIdx - 1 + currentDeck.length) % currentDeck.length; flipped = false; renderCard(); }
-function resetMastery() { mastery = {}; storeRemove('tech_mastery'); loadDeck(); showToast('השליטה בכרטיסיות אופסה'); }
+function resetMastery() { mastery = {}; storeRemove('tech_mastery'); loadDeck(); if (typeof renderReadiness === 'function') renderReadiness(); showToast('השליטה בכרטיסיות אופסה'); }
 
 document.addEventListener('keydown', e => {
   if (!document.getElementById('tab-cards').classList.contains('active')) return;
@@ -2568,6 +2702,410 @@ function exportMistakes() {
 }
 renderMistakes();
 
+// === EXAM READINESS & 13-WEEK TECHNION SEMESTER ROADMAP ===
+const SEMESTER_START = '2026-10-25'; // Winter 2026-2027 Week 1
+const SEMESTER_WEEKS = 13;
+
+const COURSES_SYLLABUS = [
+  {
+    code: 'calc',
+    name: 'חדו"א 1מ2 (01040042)',
+    lecturer: 'רבקה אביטל',
+    midtermDate: '2026-12-14',
+    midtermLecture: 7,
+    finalDate: '2027-02-08',
+    defaultLecture: 5,
+    lectures: [
+      'קבוצות, חסמים (sup/inf), אקסיומת השלמות ופונקציות',
+      'הגדרת גבול של פונקציה (ε-δ) וגבולות חד־צדדיים',
+      'משפטי יסוד בגבולות: מקומיות, חסימות, סדר, אריתמטיקה וסנדוויץ\'',
+      'גבול של הרכבה, גבולות באינסוף ו־7 צורות אי־הודאות',
+      'פונקציות מונוטוניות, גבולות סדרות ומשפט היינה',
+      'רציפות בנקודה ובקטע, סיווג אי־רציפויות, ערך הביניים וויירשטראס',
+      'מבוא לנגזרת, כללי גזירה ונגזרת פונקציה הפוכה',
+      'משפטי פרמה, רול, לגראנז\', קושי וכלל לופיטל',
+      'חקירת פונקציה, קמירות/קעירות ופולינום טיילור (שארית לגראנז\')',
+      'פונקציה קדומה, אינטגרלים מיידיים, הצבה ואינטגרציה בחלקים',
+      'אינטגרל מסוים (רימן), המשפט היסודי של החדו"א ושטחים',
+      'אינטגרלים לא אמיתיים (סוג ראשון ושני) ומבחני התכנסות',
+      'חזרה כללית ופתרון בחינות טכניוניות (מועד א\' 08.02)'
+    ]
+  },
+  {
+    code: 'alg',
+    name: 'אלגברה 1מ3 (01040067)',
+    lecturer: 'ד"ר אירינה גורליק',
+    midtermDate: '2026-12-29',
+    midtermLecture: 8,
+    finalDate: '2027-02-15',
+    defaultLecture: 6,
+    lectures: [
+      'מספרים מרוכבים: צמוד, מודול, הצגה טריגונומטרית, דה מואבר ושורשי יחידה',
+      'פולינומים ושדות: חלוקה עם שארית, שורש רציונלי, ריבוי, וייטה וצמודים',
+      'מטריצות: פעולות, שחלוף, מטריצות מיוחדות, עקבה ומחלקי אפס',
+      'מערכות משוואות לינאריות: דירוג גאוס, RREF, דרגה ומבנה u + W',
+      'מרחבים וקטוריים ותתי־מרחבים (תמ"ו), חיתוך, איחוד וסכום ישר',
+      'צירופים לינאריים, פרישה (span) ומרחבים נוצרים סופית (HW05)',
+      'תלות ואי־תלות לינארית, בסיס ומימד (dim)',
+      'מרחב שורות/עמודות/אפס, משפט המימדים ושינוי בסיס',
+      'מטריצות הפיכות, מטריצות אלמנטריות ומציאת A⁻¹',
+      'דטרמיננטות, תכונות, נוסחת קרמר והפוכה באמצעות adj(A)',
+      'העתקות לינאריות: גרעין, תמונה, משפט הדרגה ומטריצה מייצגת',
+      'ערכים עצמיים, וקטורים עצמיים ולכסון מטריצות',
+      'מכפלה פנימית, גראם־שמידט ולכסון אורתוגונלי (מועד א\' 15.02)'
+    ]
+  },
+  {
+    code: 'cs',
+    name: 'מבוא למדמ"ח — פייתון (02340221)',
+    lecturer: 'ד"ר רמי כהן',
+    midtermDate: null,
+    midtermLecture: null,
+    finalDate: '2027-02-19',
+    defaultLecture: 5,
+    lectures: [
+      'מבוא למחשוב, משתנים, טיפוסים ופעולות אריתמטיות (//, %, **)',
+      'תנאים (if/elif/else) ולוגיקה בוליאנית',
+      'לולאות while ו־for, range ומעקב איטרציות',
+      'פונקציות, פרמטרים, ערכי החזרה ו־scope',
+      'מחרוזות (str), חיתוך (slicing) ופעולות טקסט',
+      'רשימות (list), aliasing, מוטביליות ומטריצות דו־ממדיות',
+      'Tuples, קבוצות (set) ומילונים (dict)',
+      'חיפוש לינארי/בינארי, מיון בסיסי וסיבוכיות זמן O(n), O(n²)',
+      'רקורסיה בסיסית ומעקב מחסנית קריאות',
+      'רקורסיה מתקדמת, backtracking ו־memoization',
+      'קבצים, חריגות (try/except) ותכנות מונחה עצמים (class)',
+      'מבני נתונים ואלגוריתמים שימושיים בפייתון',
+      'חזרה למבחן וטסטים ב־GR (מועד א\' 19.02)'
+    ]
+  },
+  {
+    code: 'ie',
+    name: 'מבוא לתעו"נ (00940101)',
+    lecturer: 'הפקולטה למדעי הנתונים והחלטות',
+    midtermDate: null,
+    midtermLecture: null,
+    finalDate: '2027-02-23',
+    defaultLecture: 5,
+    lectures: [
+      'חשיבה מערכתית ומידול בעיות בהנדסת תעשייה וניהול',
+      'אופטימיזציה ומודלים לינאריים: משתני החלטה, מטרה ואילוצים',
+      'בעיית תרמיל הגב (0-1 ושברי) — חמדנות מול אופטימליות וחסם LP',
+      'תכנות דינמי: נוסחת נסיגה, טבלאות P[i,v] ו־Backtracking',
+      'שיווק, תמחור וביקוש (HW4)',
+      'תכנון וניהול פרויקטים (רשתות PERT/CPM ונתיב קריטי)',
+      'חיזוי ביקושים ועקומות למידה',
+      'ניהול מלאי (מודל EOQ והחלטות הזמנה)',
+      'מערכות תורים ושירות (צווארי בקבוק וביצועים)',
+      'תזמון, קווי ייצור ותפעול מערכות',
+      'קבלת החלטות בתנאי אי־ודאות ועצי החלטה',
+      'ניתוח נתונים וכלכלה הנדסית',
+      'חזרה כוללת ואינטגרציה למבחן (מועד א\' 23.02)'
+    ]
+  },
+  {
+    code: 'eng',
+    name: 'אנגלית מתקדמים ב\' (03240033)',
+    lecturer: 'ד"ר נינה חיימץ',
+    midtermDate: '2027-01-03',
+    midtermLecture: 7,
+    finalDate: '2027-02-03',
+    defaultLecture: 5,
+    lectures: [
+      'אסטרטגיות קריאה אקדמית (Skimming, Scanning, Main Idea)',
+      'מבנה פסקה, טענה מרכזית ומילות קישור לוגיות',
+      'כתיבת אימייל רשמי (Formal Email Guidelines)',
+      'אוצר מילים אקדמי והבנה מתוך הקשר',
+      'ניתוח טקסטים מדעיים־הנדסיים (Author Stance & Purpose)',
+      'סיכום, פרפרזה וכללי גילוי שימוש ב־AI',
+      'תרגול Unseen + Seen והכנה ממוקדת לבוחן האמצע (03.01)',
+      'טקסטים מורכבים והשוואת טיעונים ממקורות שונים',
+      'פרזנטציה ודיבור אקדמי (Oral Presentation)',
+      'אוצר מילים מתקדם ודקדוק אקדמי',
+      'תרגול שאלות רב־ברירה ושאלות פתוחות',
+      'סימולציות בחינה סופית על זמן (מילון מותר בלבד)',
+      'חזרה סופית לפני הבחינה (03.02)'
+    ]
+  }
+];
+
+let lectureProgress = JSON.parse(storeGet('tech_lecture_progress', '{}'));
+let quizStats = JSON.parse(storeGet('tech_quiz_stats', '{}'));
+let openSyllabi = {};
+
+function getSemesterWeek() {
+  const start = new Date(SEMESTER_START + 'T00:00:00');
+  const now = new Date();
+  const wk = Math.floor((now - start) / (7 * 86400000)) + 1;
+  return Math.max(1, Math.min(SEMESTER_WEEKS, wk));
+}
+
+function getCourseLecture(course) {
+  const saved = lectureProgress[course.code];
+  if (typeof saved === 'number' && !isNaN(saved)) return saved;
+  return Math.min(course.lectures.length, course.defaultLecture || getSemesterWeek());
+}
+
+function setCourseLecture(code, val) {
+  const num = Math.max(0, Math.min(13, Number(val) || 0));
+  lectureProgress[code] = num;
+  storeSet('tech_lecture_progress', JSON.stringify(lectureProgress));
+  renderReadiness();
+}
+
+function toggleSyllabusList(code) {
+  openSyllabi[code] = !openSyllabi[code];
+  renderReadiness();
+}
+
+function quizKey(qObj) {
+  return (qObj.c || 'alg') + '::' + (qObj.q || '').slice(0, 60);
+}
+
+function recordQuizAttempt(qObj, ok) {
+  const k = quizKey(qObj);
+  if (!quizStats[k]) quizStats[k] = { c: qObj.c || 'alg', set: qObj.set || '', q: qObj.q || '', ok: 0, bad: 0 };
+  if (ok) quizStats[k].ok++;
+  else quizStats[k].bad++;
+  storeSet('tech_quiz_stats', JSON.stringify(quizStats));
+  renderReadiness();
+}
+
+function resetQuizStats() {
+  quizStats = {};
+  storeRemove('tech_quiz_stats');
+  renderReadiness();
+  showToast('סטטיסטיקת התרגול אופסה');
+}
+
+function jumpToPractice(courseCode, setName) {
+  const hasQuiz = baseQuizData.some(q => (q.c || 'alg') === courseCode);
+  if (hasQuiz) {
+    const btn = document.querySelector('.tab-btn[data-tab="alg"]');
+    openTab('alg', btn);
+    document.getElementById('quizCourseSelect').value = courseCode;
+    updateQuizSetFilter();
+    if (setName) {
+      const sel = document.getElementById('quizSetSelect');
+      if ([...sel.options].some(o => o.value === setName)) {
+        sel.value = setName;
+        selectQuizSet();
+      }
+    }
+  } else {
+    const btn = document.querySelector('.tab-btn[data-tab="cards"]');
+    openTab('cards', btn);
+    document.getElementById('deckSelect').value = courseCode;
+    loadDeck();
+  }
+}
+
+function computeCourseReadiness(course, currentWeek) {
+  const curLec = getCourseLecture(course);
+  const targetForMidterm = course.midtermLecture && daysUntil(course.midtermDate) >= 0;
+  const targetLec = targetForMidterm ? course.midtermLecture : currentWeek;
+  const lecPct = Math.min(100, Math.round((curLec / Math.max(1, targetLec)) * 100));
+  const paceDiff = curLec - currentWeek;
+
+  // Theorem mastery
+  const thms = theoremBank.filter(t => t.c === course.code);
+  const thmDone = thms.filter(t => bankDone[t.id]).length;
+  const thmPct = thms.length ? Math.round((thmDone / thms.length) * 100) : null;
+
+  // Quiz accuracy & coverage
+  const qs = baseQuizData.filter(q => (q.c || 'alg') === course.code);
+  let qAttempted = 0, qOk = 0, qTotalAns = 0;
+  qs.forEach(q => {
+    const st = quizStats[quizKey(q)];
+    if (st && (st.ok + st.bad) > 0) {
+      qAttempted++;
+      qOk += st.ok;
+      qTotalAns += (st.ok + st.bad);
+    }
+  });
+  const qAcc = qTotalAns ? Math.round((qOk / qTotalAns) * 100) : null;
+  const qCov = qs.length ? Math.round((qAttempted / qs.length) * 100) : null;
+  const qScorePct = qs.length ? (qTotalAns ? Math.round(qAcc * 0.7 + qCov * 0.3) : 0) : null;
+
+  // Flashcards mastery
+  const cards = allCards.filter(c => c.d === course.code);
+  const cardsDone = cards.filter(c => mastery[c.id]).length;
+  const cardPct = cards.length ? Math.round((cardsDone / cards.length) * 100) : null;
+
+  // Weighted readiness score
+  let score = 0, wSum = 0;
+  const addW = (val, w) => { if (val !== null) { score += val * w; wSum += w; } };
+  addW(lecPct, 0.35);
+  addW(thmPct, 0.25);
+  addW(qScorePct, 0.25);
+  addW(cardPct, 0.15);
+  const total = wSum ? Math.round(score / wSum) : 0;
+
+  let level = 'התחלה — כדאי לסגור פערים', scoreCls = 'score-low';
+  if (total >= 80) { level = 'מוכנות גבוהה לבוחן'; scoreCls = 'score-high'; }
+  else if (total >= 60) { level = 'בסיס טוב — חזק נקודות חלשות'; scoreCls = 'score-mid'; }
+  else if (total >= 40) { level = 'בתהליך — המשך לתרגל'; scoreCls = 'score-warn'; }
+
+  let recommendation = '';
+  if (paceDiff <= -2) recommendation = `השלם קודם את הרצאות ${curLec + 1}–${currentWeek} כדי להדביק את קצב הסמסטר.`;
+  else if (qScorePct !== null && qAttempted < Math.min(8, qs.length)) recommendation = `פתור לפחות 10 שאלות בטאב התרגול כדי למדוד דיוק אמיתי בקורס.`;
+  else if (qAcc !== null && qAcc < 75) recommendation = `הדיוק שלך בתרגול הוא ${qAcc}% — חזור על השאלות שטעית בהן ופתח "הסבר מעמיק".`;
+  else if (thmPct !== null && thmPct < 60) recommendation = `עבור על בנק המשפטים וסמן "✅ שולט" על משפטים שכבר יושבים אצלך חזק.`;
+  else if (cardPct !== null && cardPct < 70) recommendation = `עשה סבב קצר בכרטיסיות החזרה כדי לנעול את מלכודות הבוחן.`;
+  else recommendation = `אתה בקצב מצוין! המשך לפתור שאלות מבחני עבר ולחדד את יומן הטעויות.`;
+
+  return {
+    curLec, targetLec, targetForMidterm, lecPct, paceDiff,
+    thmsTotal: thms.length, thmDone, thmPct,
+    qsTotal: qs.length, qAttempted, qAcc, qScorePct,
+    cardsTotal: cards.length, cardsDone, cardPct,
+    total, level, scoreCls, recommendation
+  };
+}
+
+function renderReadiness() {
+  const currentWeek = getSemesterWeek();
+  const semPct = Math.round((currentWeek / SEMESTER_WEEKS) * 100);
+  const metrics = COURSES_SYLLABUS.map(c => ({ course: c, m: computeCourseReadiness(c, currentWeek) }));
+
+  // Nearest upcoming exam
+  const calcM = metrics.find(x => x.course.code === 'calc').m;
+  const algM = metrics.find(x => x.course.code === 'alg').m;
+  const overallAvg = Math.round(metrics.reduce((s, x) => s + x.m.total, 0) / metrics.length);
+
+  // Total quiz attempts
+  const allAttempts = Object.values(quizStats);
+  const totalQOk = allAttempts.reduce((s, x) => s + x.ok, 0);
+  const totalQAns = allAttempts.reduce((s, x) => s + x.ok + x.bad, 0);
+  const globalAcc = totalQAns ? Math.round((totalQOk / totalQAns) * 100) + '%' : 'טרם נבדק';
+
+  document.getElementById('readyHero').innerHTML = `
+    <div class="stat-tile">
+      <div class="stat-label">מיקום בסמסטר (חורף תשפ"ז)</div>
+      <div class="stat-val">שבוע ${currentWeek} / ${SEMESTER_WEEKS}</div>
+      <div class="stat-sub">${semPct}% מהסמסטר • הקצב הצפוי: הרצאה ${currentWeek}</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-label">מוכנות לבוחן הקרוב (חדו"א 14.12)</div>
+      <div class="stat-val" style="color:${calcM.total >= 75 ? 'var(--ok-text)' : calcM.total >= 50 ? 'var(--primary)' : 'var(--warn-text)'};">${calcM.total}%</div>
+      <div class="stat-sub">הרצאה ${calcM.curLec}/${calcM.targetLec} לבוחן • ${daysUntil('2026-12-14')} ימים לבוחן</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-label">מוכנות לבוחן אלגברה (29.12)</div>
+      <div class="stat-val" style="color:${algM.total >= 75 ? 'var(--ok-text)' : algM.total >= 50 ? 'var(--primary)' : 'var(--warn-text)'};">${algM.total}%</div>
+      <div class="stat-sub">הרצאה ${algM.curLec}/${algM.targetLec} לבוחן • ${daysUntil('2026-12-29')} ימים לבוחן</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-label">דיוק מצטבר בתרגולים</div>
+      <div class="stat-val">${globalAcc}</div>
+      <div class="stat-sub">${totalQAns ? `${totalQOk} נכונות מתוך ${totalQAns} ניסיונות • ממוצע כללי ${overallAvg}%` : 'ענה על שאלות בטאב התרגול לדירוג מדויק'}</div>
+    </div>
+  `;
+
+  // Weak spots detector (sets with mistakes)
+  const setErrors = {};
+  allAttempts.forEach(st => {
+    if (!st.set || st.bad === 0) return;
+    if (!setErrors[st.set]) setErrors[st.set] = { c: st.c, set: st.set, ok: 0, bad: 0 };
+    setErrors[st.set].ok += st.ok;
+    setErrors[st.set].bad += st.bad;
+  });
+  const weakSets = Object.values(setErrors).sort((a, b) => (b.bad / (b.ok + b.bad)) - (a.bad / (a.ok + a.bad))).slice(0, 3);
+  const weakBox = document.getElementById('weakSpotsBox');
+  if (weakSets.length) {
+    weakBox.innerHTML = `
+      <div class="callout callout-warn" style="margin-top:0;">
+        <strong>🎯 נושאים לחיזוק מיידי (לפי השגיאות שלך בתרגול):</strong>
+        <div class="chips" style="margin-top:8px;">
+          ${weakSets.map(w => {
+            const acc = Math.round((w.ok / (w.ok + w.bad)) * 100);
+            return `<button class="btn btn-sm btn-warn" onclick="jumpToPractice('${esc(w.c)}', '${esc(w.set)}')">${esc(w.set)} (${acc}% דיוק) ← תרגל</button>`;
+          }).join('')}
+        </div>
+      </div>`;
+  } else {
+    weakBox.innerHTML = '';
+  }
+
+  // Per-course readiness & lecture map cards
+  document.getElementById('readyCoursesGrid').innerHTML = metrics.map(({ course, m }) => {
+    const paceBadge = m.paceDiff >= 0
+      ? `<span class="badge" style="background:var(--ok-soft); color:var(--ok-text);">בקצב הסמסטר ${m.paceDiff > 0 ? '(+' + m.paceDiff + ')' : '✓'}</span>`
+      : m.paceDiff === -1
+        ? `<span class="badge badge-kind">פער של הרצאה 1</span>`
+        : `<span class="badge" style="background:var(--bad-soft); color:var(--bad-text);">פער של ${Math.abs(m.paceDiff)} הרצאות</span>`;
+
+    const examNote = course.midtermDate && daysUntil(course.midtermDate) >= 0
+      ? `בוחן אמצע: ${course.midtermDate.split('-').reverse().join('.')} (עד הרצאה ${course.midtermLecture})`
+      : `מועד א': ${course.finalDate.split('-').reverse().join('.')}`;
+
+    const isOpen = !!openSyllabi[course.code];
+    const barColor = m.total >= 80 ? 'var(--ok)' : m.total >= 60 ? 'var(--primary)' : m.total >= 40 ? 'var(--warn)' : 'var(--bad)';
+
+    return `
+      <article class="course-ready-card">
+        <div class="row-between" style="align-items:flex-start;">
+          <div>
+            <div style="display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin-bottom:4px;">
+              <strong style="font-size:16px;">${esc(course.name)}</strong>
+              ${paceBadge}
+            </div>
+            <div class="muted" style="font-size:12.5px;">${esc(course.lecturer)} • ${examNote}</div>
+          </div>
+          <div class="score-ring ${m.scoreCls}">${m.total}%</div>
+        </div>
+
+        <div class="progress-track">
+          <div class="progress-fill" style="width:${m.total}%; background:${barColor};"></div>
+        </div>
+
+        <div class="lecture-ctrl">
+          <span style="font-size:13px; font-weight:600;">איפה אני: הרצאה <strong>${m.curLec}</strong> / ${course.lectures.length}</span>
+          <button class="btn btn-sm" onclick="setCourseLecture('${course.code}', ${m.curLec - 1})" title="הרצאה קודמת">−</button>
+          <input type="range" min="0" max="${course.lectures.length}" value="${m.curLec}" oninput="setCourseLecture('${course.code}', this.value)" aria-label="מספר הרצאה ב-${esc(course.name)}" />
+          <button class="btn btn-sm" onclick="setCourseLecture('${course.code}', ${m.curLec + 1})" title="הרצאה הבאה">+</button>
+        </div>
+
+        <div class="metric-row">
+          <span class="metric-chip">📅 הרצאות: ${m.curLec}/${m.targetLec}${m.targetForMidterm ? ' לבוחן' : ' צפוי'}</span>
+          ${m.thmsTotal ? `<span class="metric-chip">📚 משפטים: ${m.thmDone}/${m.thmsTotal}</span>` : ''}
+          ${m.qsTotal ? `<span class="metric-chip">🎯 תרגול: ${m.qAttempted}/${m.qsTotal}${m.qAcc !== null ? ` (${m.qAcc}% דיוק)` : ''}</span>` : ''}
+          ${m.cardsTotal ? `<span class="metric-chip">🃏 כרטיסיות: ${m.cardsDone}/${m.cardsTotal}</span>` : ''}
+        </div>
+
+        <div style="font-size:13px; color:var(--text-soft); background:var(--surface-2); padding:9px 12px; border-radius:8px;">
+          <strong>${m.level}:</strong> ${m.recommendation}
+        </div>
+
+        <div class="row-between">
+          <button class="btn btn-sm" onclick="toggleSyllabusList('${course.code}')">${isOpen ? '🔼 הסתר מפת 13 הרצאות' : '🗺️ מפת 13 הרצאות (לחץ לסימון)'}</button>
+          <button class="btn btn-primary btn-sm" onclick="jumpToPractice('${course.code}')">${m.qsTotal ? '🎯 תרגל עכשיו' : '🃏 כרטיסיות חזרה'}</button>
+        </div>
+
+        <div class="syllabus-list ${isOpen ? 'open' : ''}">
+          ${course.lectures.map((title, idx) => {
+            const n = idx + 1;
+            const done = n <= m.curLec;
+            const isMid = course.midtermLecture === n;
+            const isNow = n === currentWeek;
+            return `
+              <div class="lec-row ${done ? 'done' : ''} ${isMid ? 'midterm' : isNow ? 'now-week' : ''}" onclick="setCourseLecture('${course.code}', ${n === m.curLec ? n - 1 : n})">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span class="lec-num">${done ? '✅' : '⬜'} הרצאה ${n}</span>
+                  <span>${formatMath(title)}</span>
+                </div>
+                <div style="display:flex; gap:5px; flex-shrink:0;">
+                  ${isNow ? '<span class="badge badge-alg">שבוע נוכחי</span>' : ''}
+                  ${isMid ? '<span class="badge badge-kind">⭐ בוחן אמצע</span>' : ''}
+                </div>
+              </div>`;
+          }).join('')}
+        </div>
+      </article>`;
+  }).join('');
+}
+renderReadiness();
+
 // === LIVE AUTO-SYNC LOADER (reads data.json on GitHub Pages; falls back gracefully offline) ===
 async function loadLiveData() {
   if (location.protocol === 'file:') return;
@@ -2594,6 +3132,7 @@ async function loadLiveData() {
     if (d.lastUpdated) {
       document.getElementById('brandSub').textContent = `סהר קנדל • חורף תשפ"ז • עודכן ${d.lastUpdated}`;
     }
+    renderReadiness();
   } catch (e) {
     // Offline or data.json not uploaded yet — built-in fallback data stays active
   }
