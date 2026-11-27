@@ -580,6 +580,39 @@
     gap: 10px;
     flex-wrap: wrap;
   }
+  .upcoming-bar {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 13px 16px;
+    margin-bottom: 18px;
+  }
+  .upcoming-bar.has-items { display: block; }
+  .upcoming-list {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 9px;
+  }
+  .upcoming-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 6px 11px;
+    border-radius: 9px;
+    font-size: 12.5px;
+    color: var(--text-soft);
+  }
+  .upcoming-pill.urgent {
+    border-color: color-mix(in srgb, var(--warn) 55%, transparent);
+    background: var(--warn-soft);
+    color: var(--text);
+  }
+  .upcoming-pill strong { color: var(--primary); font-variant-numeric: tabular-nums; }
+  .upcoming-pill.urgent strong { color: var(--warn-text); }
 </style>
 </head>
 <body>
@@ -590,7 +623,7 @@
       <div class="brand-mark">T+</div>
       <div>
         <h1>Technion Study Hub</h1>
-        <div class="brand-sub">סהר קנדל • חורף תשפ"ז</div>
+        <div class="brand-sub" id="brandSub">סהר קנדל • חורף תשפ"ז</div>
       </div>
     </div>
     <div class="topbar-right">
@@ -603,7 +636,7 @@
 <div class="nav-wrap">
   <nav role="tablist">
     <button class="tab-btn active" role="tab" onclick="openTab('bank', this)">📚 בנק משפטים</button>
-    <button class="tab-btn" role="tab" onclick="openTab('alg', this)">🎯 תרגול אלגברה HW05</button>
+    <button class="tab-btn" role="tab" onclick="openTab('alg', this)">🎯 תרגול ושאלות</button>
     <button class="tab-btn" role="tab" onclick="openTab('cards', this)">🃏 כרטיסיות אמצע</button>
     <button class="tab-btn" role="tab" onclick="openTab('ww', this)">⚡ בודק WeBWorK</button>
     <button class="tab-btn" role="tab" onclick="openTab('focus', this)">⏱️ פומודורו וטעויות</button>
@@ -612,12 +645,20 @@
 </div>
 
 <main>
+  <section class="upcoming-bar" id="upcomingBar" aria-label="הגשות קרובות">
+    <div class="row-between">
+      <strong style="font-size:13.5px;">📅 הגשות ומטלות קרובות (מסונכרן אוטומטית מהיומן)</strong>
+      <small class="muted" id="upcomingCount"></small>
+    </div>
+    <div class="upcoming-list" id="upcomingList"></div>
+  </section>
+
   <!-- TAB 1: THEOREM & DEFINITION BANK -->
   <section id="tab-bank" class="tab active">
     <div class="section-header">
       <div>
         <h2>בנק משפטים, הגדרות ונוסחאות</h2>
-        <p>אלגברה 1מ3 (ד"ר אירינה גורליק) + חדו"א 1מ2 (רבקה אביטל) — כולל מלכודות בוחן</p>
+        <p>מתעדכן אוטומטית ממצגות וסיכומי הקורסים ב־Google Drive — כולל מלכודות בוחן</p>
       </div>
       <div class="progress-meta" id="bankCount"></div>
     </div>
@@ -647,16 +688,17 @@
     <div class="grid grid-2" id="bankGrid"></div>
   </section>
 
-  <!-- TAB 2: ALGEBRA HW05 VECTOR SPACES -->
+  <!-- TAB 2: PRACTICE DRILLS (HW05 + AUTO-SYNCED SETS) -->
   <section id="tab-alg" class="tab">
     <div class="section-header">
       <div>
-        <h2>אימון אלגברה HW05 — מרחבים ותתי־מרחבים</h2>
-        <p>16 שאלות קלאסיות מסיכומים 5 ו־6: זהה אם W תת־מרחב וקטורי וקבל נימוק או דוגמה נגדית</p>
+        <h2>תרגול מהיר — נכון / לא נכון</h2>
+        <p>שאלות קלאסיות מסיכומים וש"ב (כולל סטים שנוספים אוטומטית מ־Drive) עם נימוק מיידי</p>
       </div>
-      <div style="display:flex; gap:8px;">
-        <button class="btn btn-sm" onclick="shuffleQuiz()">🔀 ערבב שאלות</button>
-        <button class="btn btn-sm" onclick="resetQuiz()">↺ התחל מחדש</button>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+        <select id="quizSetSelect" style="width:auto;" onchange="selectQuizSet()"></select>
+        <button class="btn btn-sm" onclick="shuffleQuiz()">🔀 ערבב</button>
+        <button class="btn btn-sm" onclick="resetQuiz()">↺ איפוס</button>
       </div>
     </div>
 
@@ -673,8 +715,8 @@
         <div class="quiz-prompt" id="qPrompt"></div>
 
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn btn-ok" onclick="answerQuiz(true)">✅ כן — תת־מרחב וקטורי</button>
-          <button class="btn btn-bad" onclick="answerQuiz(false)">❌ לא תת־מרחב</button>
+          <button class="btn btn-ok" onclick="answerQuiz(true)">✅ כן / נכון</button>
+          <button class="btn btn-bad" onclick="answerQuiz(false)">❌ לא / לא נכון</button>
           <button class="btn" onclick="nextQuiz()" style="margin-right:auto;">הבא ←</button>
         </div>
         <div id="qFeedback"></div>
@@ -940,16 +982,48 @@ function toggleTheme() {
 }
 applyTheme(storeGet('tech_theme', 'dark'));
 
-// === COUNTDOWNS ===
-const exams = [
+// === COUNTDOWNS & UPCOMING ===
+const COURSE_NAMES = {
+  alg: 'אלגברה 1מ3',
+  calc: 'חדו"א 1מ2',
+  cs: 'מבוא למדמ"ח',
+  ie: 'מבוא לתעו"נ',
+  eng: 'אנגלית 03240033'
+};
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+}
+
+let exams = [
   { name: 'בוחן חדו"א', date: '2026-12-14' },
   { name: 'בוחן אלגברה', date: '2026-12-29' },
   { name: 'בוחן אנגלית', date: '2027-01-03' }
 ];
-document.getElementById('countdownStrip').innerHTML = exams.map(e => {
-  const diff = Math.ceil((new Date(e.date + 'T00:00:00') - new Date()) / 86400000);
-  return `<div class="exam-pill">${e.name} <strong>${diff >= 0 ? diff + ' ימים' : 'עבר'}</strong></div>`;
-}).join('');
+let upcoming = [];
+
+function daysUntil(dateStr) {
+  return Math.ceil((new Date(dateStr + 'T00:00:00') - new Date()) / 86400000);
+}
+function renderExams() {
+  document.getElementById('countdownStrip').innerHTML = exams.map(e => {
+    const diff = daysUntil(e.date);
+    return `<div class="exam-pill">${esc(e.name)} <strong>${diff >= 0 ? diff + ' ימים' : 'עבר'}</strong></div>`;
+  }).join('');
+}
+function renderUpcoming() {
+  const bar = document.getElementById('upcomingBar');
+  const active = (upcoming || []).filter(u => daysUntil(u.date) >= 0);
+  bar.classList.toggle('has-items', active.length > 0);
+  if (!active.length) return;
+  document.getElementById('upcomingCount').textContent = `${active.length} קרובות`;
+  document.getElementById('upcomingList').innerHTML = active.map(u => {
+    const d = daysUntil(u.date);
+    const label = d === 0 ? 'היום!' : d === 1 ? 'מחר' : `בעוד ${d} ימים`;
+    return `<div class="upcoming-pill ${d <= 2 ? 'urgent' : ''}"><span>${esc(u.title)}</span><strong>${label}${u.time ? ' • ' + esc(u.time) : ''}</strong></div>`;
+  }).join('');
+}
+renderExams();
+renderUpcoming();
 
 function openTab(id, btn) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -959,7 +1033,7 @@ function openTab(id, btn) {
 }
 
 // === THEOREM & DEFINITION BANK ===
-const theoremBank = [
+let theoremBank = [
   // ALGEBRA 1: Complex Numbers
   { id:'t1', c:'alg', topic:'מספרים מרוכבים', kind:'הגדרה', title:'מספר מרוכב, צמוד ומודול', body:'z = a + bi (a,b ∈ R, i² = -1). חלק ממשי Re(z)=a, מדומה Im(z)=b, צמוד z̄ = a - bi, מודול |z| = √(a² + b²). מתקיים z·z̄ = |z|², z + z̄ = 2Re(z), z - z̄ = 2i·Im(z).', trap:'חילוק: z/w = (z·w̄)/|w|². מדומה טהור ⇔ Re(z)=0; ממשי ⇔ Im(z)=0.' },
   { id:'t2', c:'alg', topic:'מספרים מרוכבים', kind:'משפט', title:'הצגה טריגונומטרית וכפל/חילוק', body:'z = r·cis(θ) כאשר r = |z| ו-a = r·cosθ, b = r·sinθ. עבור w = s·cis(α): מתקיים zw = rs·cis(θ+α), ו-z/w = (r/s)·cis(θ-α).', trap:'צמוד: z̄ = r·cis(-θ). את θ קובעים לפי הרביע (הסימנים של a,b), לא רק לפי arctan(b/a)!' },
@@ -1025,11 +1099,18 @@ const theoremBank = [
 ];
 
 let bankDone = JSON.parse(storeGet('tech_bank_done', '{}'));
+function updateCourseFilter() {
+  const sel = document.getElementById('bankCourse');
+  const prev = sel.value || 'all';
+  const codes = [...new Set(theoremBank.map(x => x.c))];
+  sel.innerHTML = '<option value="all">כל הקורסים</option>' + codes.map(code => `<option value="${esc(code)}">${esc(COURSE_NAMES[code] || code)}</option>`).join('');
+  sel.value = codes.includes(prev) ? prev : 'all';
+}
 function updateTopicFilter() {
   const c = document.getElementById('bankCourse').value;
   const topics = [...new Set(theoremBank.filter(x => c === 'all' || x.c === c).map(x => x.topic))];
   const sel = document.getElementById('bankTopic');
-  sel.innerHTML = '<option value="all">כל הנושאים</option>' + topics.map(t => `<option value="${t}">${t}</option>`).join('');
+  sel.innerHTML = '<option value="all">כל הנושאים</option>' + topics.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join('');
 }
 function toggleBankDone(id) {
   bankDone[id] = !bankDone[id];
@@ -1045,53 +1126,71 @@ function renderBank() {
     (c === 'all' || x.c === c) &&
     (t === 'all' || x.topic === t) &&
     (st === 'all' || (st === 'done' ? !!bankDone[x.id] : !bankDone[x.id])) &&
-    (!q || (x.title + ' ' + x.body + ' ' + x.trap + ' ' + x.topic).toLowerCase().includes(q))
+    (!q || (x.title + ' ' + x.body + ' ' + x.trap + ' ' + x.topic + ' ' + (x.source || '')).toLowerCase().includes(q))
   );
   const doneCnt = theoremBank.filter(x => bankDone[x.id]).length;
-  const pct = Math.round((doneCnt / theoremBank.length) * 100);
+  const pct = theoremBank.length ? Math.round((doneCnt / theoremBank.length) * 100) : 0;
   document.getElementById('bankBar').style.width = pct + '%';
   document.getElementById('bankCount').innerHTML = `<span>מוצגים <strong>${list.length}</strong> / ${theoremBank.length}</span><span>•</span><span>שולט ב־<strong>${doneCnt}</strong> (${pct}%)</span>`;
   document.getElementById('bankGrid').innerHTML = list.map(x => `
     <article class="thm-card ${bankDone[x.id] ? 'done' : ''}">
       <div class="thm-head">
         <div class="thm-tags">
-          <span class="badge ${x.c === 'alg' ? 'badge-alg' : 'badge-calc'}">${x.c === 'alg' ? 'אלגברה 1מ3' : 'חדו"א 1מ2'}</span>
-          <span class="badge">${x.topic}</span>
-          <span class="badge badge-kind">${x.kind}</span>
+          <span class="badge ${x.c === 'calc' ? 'badge-calc' : 'badge-alg'}">${esc(COURSE_NAMES[x.c] || x.c)}</span>
+          <span class="badge">${esc(x.topic)}</span>
+          <span class="badge badge-kind">${esc(x.kind)}</span>
         </div>
-        <button class="chip ${bankDone[x.id] ? 'active' : ''}" onclick="toggleBankDone('${x.id}')">${bankDone[x.id] ? '✅ שולט' : 'סמן כשולט'}</button>
+        <button class="chip ${bankDone[x.id] ? 'active' : ''}" onclick="toggleBankDone('${esc(x.id)}')">${bankDone[x.id] ? '✅ שולט' : 'סמן כשולט'}</button>
       </div>
-      <div class="thm-title">${x.title}</div>
-      <div class="thm-body">${x.body}</div>
-      <div class="thm-trap"><strong>⚠️ מלכודת בוחן:</strong> ${x.trap}</div>
+      <div class="thm-title">${esc(x.title)}</div>
+      <div class="thm-body">${esc(x.body)}</div>
+      <div class="thm-trap"><strong>⚠️ מלכודת בוחן:</strong> ${esc(x.trap)}${x.source ? `<div class="muted" style="font-size:11.5px; margin-top:4px;">מקור: ${esc(x.source)}</div>` : ''}</div>
     </article>
   `).join('') || '<div class="card" style="grid-column:1/-1; text-align:center;"><p class="muted">לא נמצאו משפטים תואמים לסינון הזה.</p></div>';
 }
+updateCourseFilter();
 updateTopicFilter();
 renderBank();
 
-// === ALGEBRA HW05 QUIZ ===
-const baseQuizData = [
-  { q: 'W = { (x, y, z) ∈ R³ | 2x - 3y + z = 0 } מעל R', ans: true, exp: 'כן! אוסף פתרונות של מערכת הומוגנית Ax = 0 הוא תמיד תמ"ו (סיכום 5).' },
-  { q: 'W = { (x, y, z) ∈ R³ | x + y + z = 1 } מעל R', ans: false, exp: 'לא! וקטור האפס (0,0,0) לא מקיים 0+0+0=1 ולכן 0 ∉ W.' },
-  { q: 'W = { (x, y) ∈ R² | x·y = 0 } מעל R', ans: false, exp: 'לא! אין סגירות לחיבור: (1,0) ו-(0,1) ב-W, אך סכומם (1,1) ∉ W.' },
-  { q: 'W = { p(x) ∈ R[x] | deg(p) = 3 } מעל R', ans: false, exp: 'לא! פולינום האפס לא בפנים, וגם סכום יכול להוריד מעלה: (x³+1)+(-x³+2)=3.' },
-  { q: 'W = { p(x) ∈ R₃[x] | p(2) = 0 } מעל R', ans: true, exp: 'כן! 0(2)=0 ו-(αp+βq)(2) = α·0 + β·0 = 0.' },
-  { q: 'W = { p(x) ∈ R₃[x] | p(0) = 1 } מעל R', ans: false, exp: 'לא! פולינום האפס לא בפנים כי 0(0) = 0 ≠ 1.' },
-  { q: 'W = { A ∈ R^(n×n) | tr(A) = 0 } מעל R', ans: true, exp: 'כן! tr(0)=0 ו-tr(αA+βB) = α·tr(A)+β·tr(B) = 0.' },
-  { q: 'W = { A ∈ R^(n×n) | A = A^t } (מטריצות סימטריות) מעל R', ans: true, exp: 'כן! 0^t=0 ו-(αA+βB)^t = αA+βB.' },
-  { q: 'W = { A ∈ R^(2×2) | A הפיכה } מעל R', ans: false, exp: 'לא! מטריצת האפס אינה הפיכה (וגם I + (-I) = 0 לא הפיכה).' },
-  { q: 'R כקבוצה מעל השדה C', ans: false, exp: 'לא! אין סגירות לכפל בסקלר מ-C: i · 1 = i ∉ R.' },
-  { q: 'C כקבוצה מעל השדה R', ans: true, exp: 'כן! סכום וכפל בסקלר ממשי של מרוכבים נשארים ב-C.' },
-  { q: 'W = { (x, y) ∈ R² | x ≥ 0, y ≥ 0 } מעל R', ans: false, exp: 'לא! אין סגירות לכפל בסקלר שלילי: (-1)·(1,1) = (-1,-1) ∉ W.' },
-  { q: 'יהיו U, W תמ"ו של V. האם U ∩ W בהכרח תמ"ו?', ans: true, exp: 'כן! חיתוך תתי-מרחבים תמיד תמ"ו (סיכום 5).' },
-  { q: 'יהיו U, W תמ"ו של V. האם U ∪ W בהכרח תמ"ו?', ans: false, exp: 'לא! U ∪ W תמ"ו אמ"ם U ⊆ W או W ⊆ U (דוגמה: ציר x וציר y ב-R²).' },
-  { q: 'W = { f: R→R | f(-x) = f(x) } (פונקציות זוגיות) מעל R', ans: true, exp: 'כן! פונקציית האפס זוגית וצירוף לינארי של זוגיות נשאר זוגי.' },
-  { q: 'האם מרחב כל הפולינומים R[x] נוצר סופית?', ans: false, exp: 'לא! קבוצה סופית פורשת רק עד המעלה המקסימלית שבה (סיכום 6).' }
+// === PRACTICE DRILLS (HW05 + AUTO-SYNCED SETS) ===
+let baseQuizData = [
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'W = { (x, y, z) ∈ R³ | 2x - 3y + z = 0 } מעל R', ans: true, exp: 'כן! אוסף פתרונות של מערכת הומוגנית Ax = 0 הוא תמיד תמ"ו (סיכום 5).' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'W = { (x, y, z) ∈ R³ | x + y + z = 1 } מעל R', ans: false, exp: 'לא! וקטור האפס (0,0,0) לא מקיים 0+0+0=1 ולכן 0 ∉ W.' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'W = { (x, y) ∈ R² | x·y = 0 } מעל R', ans: false, exp: 'לא! אין סגירות לחיבור: (1,0) ו-(0,1) ב-W, אך סכומם (1,1) ∉ W.' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'W = { p(x) ∈ R[x] | deg(p) = 3 } מעל R', ans: false, exp: 'לא! פולינום האפס לא בפנים, וגם סכום יכול להוריד מעלה: (x³+1)+(-x³+2)=3.' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'W = { p(x) ∈ R₃[x] | p(2) = 0 } מעל R', ans: true, exp: 'כן! 0(2)=0 ו-(αp+βq)(2) = α·0 + β·0 = 0.' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'W = { p(x) ∈ R₃[x] | p(0) = 1 } מעל R', ans: false, exp: 'לא! פולינום האפס לא בפנים כי 0(0) = 0 ≠ 1.' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'W = { A ∈ R^(n×n) | tr(A) = 0 } מעל R', ans: true, exp: 'כן! tr(0)=0 ו-tr(αA+βB) = α·tr(A)+β·tr(B) = 0.' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'W = { A ∈ R^(n×n) | A = A^t } (מטריצות סימטריות) מעל R', ans: true, exp: 'כן! 0^t=0 ו-(αA+βB)^t = αA+βB.' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'W = { A ∈ R^(2×2) | A הפיכה } מעל R', ans: false, exp: 'לא! מטריצת האפס אינה הפיכה (וגם I + (-I) = 0 לא הפיכה).' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'R כקבוצה מעל השדה C', ans: false, exp: 'לא! אין סגירות לכפל בסקלר מ-C: i · 1 = i ∉ R.' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'C כקבוצה מעל השדה R', ans: true, exp: 'כן! סכום וכפל בסקלר ממשי של מרוכבים נשארים ב-C.' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'W = { (x, y) ∈ R² | x ≥ 0, y ≥ 0 } מעל R', ans: false, exp: 'לא! אין סגירות לכפל בסקלר שלילי: (-1)·(1,1) = (-1,-1) ∉ W.' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'יהיו U, W תמ"ו של V. האם U ∩ W בהכרח תמ"ו?', ans: true, exp: 'כן! חיתוך תתי-מרחבים תמיד תמ"ו (סיכום 5).' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'יהיו U, W תמ"ו של V. האם U ∪ W בהכרח תמ"ו?', ans: false, exp: 'לא! U ∪ W תמ"ו אמ"ם U ⊆ W או W ⊆ U (דוגמה: ציר x וציר y ב-R²).' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'W = { f: R→R | f(-x) = f(x) } (פונקציות זוגיות) מעל R', ans: true, exp: 'כן! פונקציית האפס זוגית וצירוף לינארי של זוגיות נשאר זוגי.' },
+  { set: 'אלגברה HW05 — תתי-מרחבים', q: 'האם מרחב כל הפולינומים R[x] נוצר סופית?', ans: false, exp: 'לא! קבוצה סופית פורשת רק עד המעלה המקסימלית שבה (סיכום 6).' }
 ];
 let quizData = [...baseQuizData];
 let qIdx = 0, qScore = 0, qTotal = 0, qAnswered = false;
+
+function updateQuizSetFilter() {
+  const sel = document.getElementById('quizSetSelect');
+  const sets = [...new Set(baseQuizData.map(x => x.set || 'אלגברה HW05 — תתי-מרחבים'))];
+  const prev = sel.value;
+  sel.innerHTML = (sets.length > 1 ? '<option value="all">כל סטי התרגול</option>' : '') + sets.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
+  if (prev && (prev === 'all' || sets.includes(prev))) sel.value = prev;
+  selectQuizSet();
+}
+function selectQuizSet() {
+  const s = document.getElementById('quizSetSelect').value;
+  quizData = baseQuizData.filter(x => s === 'all' || (x.set || 'אלגברה HW05 — תתי-מרחבים') === s);
+  if (!quizData.length) quizData = [...baseQuizData];
+  qIdx = 0; qScore = 0; qTotal = 0;
+  renderQuiz();
+}
 function renderQuiz() {
+  if (!quizData.length) return;
   document.getElementById('qProgress').textContent = `שאלה ${qIdx + 1} / ${quizData.length}`;
   document.getElementById('qBar').style.width = `${Math.round(((qIdx + 1) / quizData.length) * 100)}%`;
   document.getElementById('qPrompt').textContent = quizData[qIdx].q;
@@ -1101,27 +1200,23 @@ function renderQuiz() {
   qAnswered = false;
 }
 function answerQuiz(choice) {
-  if (qAnswered) return;
+  if (qAnswered || !quizData.length) return;
   qAnswered = true; qTotal++;
   const ok = (choice === quizData[qIdx].ans);
   if (ok) qScore++;
   document.getElementById('qScore').textContent = qScore;
   document.getElementById('qTotal').textContent = qTotal;
-  document.getElementById('qFeedback').innerHTML = `<div class="callout ${ok ? 'callout-ok' : 'callout-bad'}"><strong>${ok ? 'מדויק! 🎉' : 'שים לב:'}</strong><br>${quizData[qIdx].exp}</div>`;
+  document.getElementById('qFeedback').innerHTML = `<div class="callout ${ok ? 'callout-ok' : 'callout-bad'}"><strong>${ok ? 'מדויק! 🎉' : 'שים לב:'}</strong><br>${esc(quizData[qIdx].exp)}</div>`;
 }
-function nextQuiz() { qIdx = (qIdx + 1) % quizData.length; renderQuiz(); }
+function nextQuiz() { if (!quizData.length) return; qIdx = (qIdx + 1) % quizData.length; renderQuiz(); }
 function shuffleQuiz() {
-  quizData = [...baseQuizData].sort(() => Math.random() - 0.5);
+  quizData = [...quizData].sort(() => Math.random() - 0.5);
   qIdx = 0; qScore = 0; qTotal = 0;
   renderQuiz();
   showToast('השאלות עורבבו');
 }
-function resetQuiz() {
-  quizData = [...baseQuizData];
-  qIdx = 0; qScore = 0; qTotal = 0;
-  renderQuiz();
-}
-renderQuiz();
+function resetQuiz() { selectQuizSet(); }
+updateQuizSetFilter();
 
 // === WEBWORK VALIDATOR ===
 function insertWW(s) {
@@ -1156,7 +1251,7 @@ function checkWW() {
 }
 
 // === FLASHCARDS ===
-const allCards = [
+let allCards = [
   { id:'c1', d:'calc', c:'חדו"א 1מ2', q:'האם התכנסות גוררת חסימות? ומה הכיוון ההפוך?', a:'התכנסות גוררת חסימות בסביבה מנוקבת. ההפוך שגוי: sin(1/x) חסומה בלי גבול ב-0.' },
   { id:'c2', d:'calc', c:'חדו"א 1מ2', q:'אם f(x) < g(x) והגבולות קיימים, האם lim f < lim g?', a:'לא! אי-שוויון חלש בלבד: lim f ≤ lim g (דוגמה: -x² < x² ב-0).' },
   { id:'c3', d:'calc', c:'חדו"א 1מ2', q:'מה התנאי הקריטי במשפט גבול של הרכבה g(f(x))?', a:'או g רציפה ב-L, או f(x) ≠ L בסביבה מנוקבת של a!' },
@@ -1300,6 +1395,38 @@ function exportMistakes() {
   navigator.clipboard && navigator.clipboard.writeText(md).then(() => showToast('הועתק כ־Markdown ✓')).catch(() => {});
 }
 renderMistakes();
+
+// === LIVE AUTO-SYNC LOADER (reads data.json on GitHub Pages; falls back gracefully offline) ===
+async function loadLiveData() {
+  if (location.protocol === 'file:') return;
+  try {
+    const res = await fetch('./data.json?v=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) return;
+    const d = await res.json();
+    if (Array.isArray(d.exams) && d.exams.length) { exams = d.exams; renderExams(); }
+    if (Array.isArray(d.upcoming)) { upcoming = d.upcoming; renderUpcoming(); }
+    if (Array.isArray(d.theoremBank) && d.theoremBank.length) {
+      theoremBank = d.theoremBank;
+      updateCourseFilter();
+      updateTopicFilter();
+      renderBank();
+    }
+    if (Array.isArray(d.quizData) && d.quizData.length) {
+      baseQuizData = d.quizData;
+      updateQuizSetFilter();
+    }
+    if (Array.isArray(d.allCards) && d.allCards.length) {
+      allCards = d.allCards;
+      loadDeck();
+    }
+    if (d.lastUpdated) {
+      document.getElementById('brandSub').textContent = `סהר קנדל • חורף תשפ"ז • עודכן ${d.lastUpdated}`;
+    }
+  } catch (e) {
+    // Offline or data.json not uploaded yet — built-in fallback data stays active
+  }
+}
+loadLiveData();
 </script>
 </body>
 </html>
