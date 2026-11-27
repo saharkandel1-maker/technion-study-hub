@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Technion Study Hub — מרכז הלמידה האישי של סהר קנדל לחורף תשפ&quot;ז: בנק משפטים והגדרות, תרגול אלגברה, כרטיסיות, בודק WeBWorK, פומודורו וקישורי קורסים." />
+<title>Technion Study Hub — חורף תשפ"ז</title>
+<style>
+  :root {
+    --bg: #0d1016;
+    --surface: #141821;
+    --surface-2: #1b212e;
+    --surface-hover: #212838;
+    --border: #272f40;
+    --border-strong: #364158;
+    --text: #eef2f8;
+    --text-soft: #c5cedf;
+    --muted: #8a95ad;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --primary-soft: rgba(59, 130, 246, 0.14);
+    --ok: #10b981;
+    --ok-soft: rgba(16, 185, 129, 0.13);
+    --ok-text: #6ee7b7;
+    --warn: #f59e0b;
+    --warn-soft: rgba(245, 158, 11, 0.12);
+    --warn-text: #fcd34d;
+    --bad: #ef4444;
+    --bad-soft: rgba(239, 68, 68, 0.13);
+    --bad-text: #fca5a5;
+    --cyan: #06b6d4;
+    --cyan-soft: rgba(6, 182, 212, 0.13);
+    --cyan-text: #67e8f9;
+    --code-bg: #0a0d13;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    --radius: 14px;
+    --radius-sm: 9px;
+  }
+
+  body.light {
+    --bg: #f5f7fb;
+    --surface: #ffffff;
+    --surface-2: #f1f4f9;
+    --surface-hover: #e7ecf5;
+    --border: #dde3ee;
+    --border-strong: #c4cddf;
+    --text: #111827;
+    --text-soft: #374151;
+    --muted: #64748b;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-soft: rgba(37, 99, 235, 0.1);
+    --ok: #059669;
+    --ok-soft: rgba(5, 150, 105, 0.1);
+    --ok-text: #047857;
+    --warn: #d97706;
+    --warn-soft: rgba(217, 119, 6, 0.11);
+    --warn-text: #b45309;
+    --bad: #dc2626;
+    --bad-soft: rgba(220, 38, 38, 0.1);
+    --bad-text: #b91c1c;
+    --cyan: #0891b2;
+    --cyan-soft: rgba(8, 145, 178, 0.11);
+    --cyan-text: #0e7490;
+    --code-bg: #eef2f7;
+    --shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Rubik", "Heebo", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: color-mix(in srgb, var(--surface) 90%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--primary);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+  }
+  .brand h1 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+  .brand-sub {
+    color: var(--muted);
+    font-size: 12.5px;
+  }
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .countdown-strip {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .exam-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--text-soft);
+  }
+  .exam-pill strong {
+    color: var(--primary);
+    font-variant-numeric: tabular-nums;
+  }
+  .theme-btn {
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text);
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-size: 15px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .theme-btn:hover { background: var(--surface-hover); border-color: var(--border-strong); }
+
+  /* Tabs nav */
+  .nav-wrap {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  nav {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    position: relative;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    padding: 13px 15px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 13.5px;
+    white-space: nowrap;
+    transition: color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--text); }
+  .tab-btn.active::after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 0;
+    height: 2.5px;
+    border-radius: 2px 2px 0 0;
+    background: var(--primary);
+  }
+
+  /* Layout */
+  main {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px 20px 64px;
+  }
+  .tab { display: none; }
+  .tab.active { display: block; animation: fadeIn 0.16s ease-out; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .section-header h2 {
+    margin: 0 0 4px 0;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .section-header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+
+  .grid { display: grid; gap: 16px; }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .card h3 {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  /* Progress bar */
+  .progress-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-soft);
+  }
+  .progress-track {
+    width: 100%;
+    height: 7px;
+    background: var(--surface-2);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--ok);
+    border-radius: 999px;
+    transition: width 0.25s ease;
+  }
+  .progress-fill.primary { background: var(--primary); }
+
+  /* Controls & Buttons */
+  .filter-bar {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  @media (max-width: 820px) {
+    .filter-bar { grid-template-columns: 1fr 1fr; }
+    .filter-bar input { grid-column: 1 / -1; }
+  }
+  @media (max-width: 520px) {
+    .filter-bar { grid-template-columns: 1fr; }
+  }
+
+  input, textarea, select {
+    width: 100%;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--primary);
+  }
+
+  .btn {
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn:hover { background: var(--surface-hover); border-color: var(--border-strong); }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+  .btn-ok { background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 45%, transparent); color: var(--ok-text); }
+  .btn-ok:hover { background: color-mix(in srgb, var(--ok) 22%, transparent); }
+  .btn-bad { background: var(--bad-soft); border-color: color-mix(in srgb, var(--bad) 45%, transparent); color: var(--bad-text); }
+  .btn-bad:hover { background: color-mix(in srgb, var(--bad) 22%, transparent); }
+  .btn-warn { background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 45%, transparent); color: var(--warn-text); }
+  .btn-warn:hover { background: color-mix(in srgb, var(--warn) 22%, transparent); }
+  .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 7px; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-soft);
+    padding: 6px 11px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .chip:hover { border-color: var(--primary); color: var(--text); }
+  .chip.active {
+    background: var(--ok-soft);
+    border-color: color-mix(in srgb, var(--ok) 55%, transparent);
+    color: var(--ok-text);
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11.5px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    background: var(--surface-2);
+    color: var(--text-soft);
+    font-weight: 600;
+  }
+  .badge-alg { background: var(--primary-soft); color: #93c5fd; }
+  body.light .badge-alg { color: #1d4ed8; }
+  .badge-calc { background: var(--cyan-soft); color: var(--cyan-text); }
+  .badge-kind { background: var(--warn-soft); color: var(--warn-text); }
+
+  /* Code / Math */
+  code, .mono {
+    font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+    direction: ltr;
+    unicode-bidi: isolate;
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 5px;
+    color: var(--cyan-text);
+    font-size: 13px;
+  }
+  body.light code, body.light .mono { color: #0f4c81; }
+  .ltr { direction: ltr; text-align: left; }
+
+  /* Alerts */
+  .callout {
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-top: 12px;
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+  .callout-ok { background: var(--ok-soft); border-right: 3px solid var(--ok); color: var(--text); }
+  .callout-bad { background: var(--bad-soft); border-right: 3px solid var(--bad); color: var(--text); }
+  .callout-warn { background: var(--warn-soft); border-right: 3px solid var(--warn); color: var(--text); }
+
+  /* Theorem cards */
+  .thm-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .thm-card:hover { border-color: var(--border-strong); }
+  .thm-card.done {
+    border-color: color-mix(in srgb, var(--ok) 45%, var(--border));
+  }
+  .thm-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .thm-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .thm-title {
+    font-weight: 700;
+    font-size: 15.5px;
+    color: var(--text);
+  }
+  .thm-body {
+    font-size: 14px;
+    color: var(--text-soft);
+    line-height: 1.7;
+  }
+  .thm-trap {
+    margin-top: auto;
+    font-size: 13px;
+    background: var(--warn-soft);
+    border-right: 3px solid var(--warn);
+    padding: 9px 12px;
+    border-radius: 8px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .thm-trap strong { color: var(--warn-text); }
+
+  /* Quiz */
+  .quiz-prompt {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.6;
+    margin: 16px 0 18px;
+    padding: 18px;
+    background: var(--surface-2);
+    border-radius: 11px;
+    border: 1px solid var(--border);
+  }
+  .cheat-list {
+    margin: 8px 0 0;
+    padding-right: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 13.5px;
+    color: var(--text-soft);
+  }
+
+  /* Flashcards */
+  .flashcard-shell {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+  .flashcard {
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    padding: 32px 28px;
+    transition: border-color 0.2s, transform 0.15s, background 0.2s;
+  }
+  .flashcard:hover { border-color: var(--primary); }
+  .flashcard.flipped {
+    background: color-mix(in srgb, var(--primary) 9%, var(--surface));
+    border-color: var(--primary);
+  }
+  .flashcard-face {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.6;
+    max-width: 660px;
+    margin: 14px 0;
+  }
+  .flashcard-hint {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  /* Pomodoro */
+  .timer-box {
+    text-align: center;
+    padding: 16px 0 8px;
+  }
+  .timer-display {
+    font-size: 62px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    font-variant-numeric: tabular-nums;
+    margin: 14px 0 18px;
+    line-height: 1;
+  }
+
+  /* Mistakes */
+  .mistake-item {
+    border-top: 1px solid var(--border);
+    padding: 12px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .mistake-item:first-child { border-top: none; }
+
+  /* Links */
+  .link-list { display: flex; flex-direction: column; gap: 8px; }
+  .link-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    background: var(--surface-2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    transition: border-color 0.15s;
+  }
+  .link-row:hover { border-color: var(--border-strong); }
+  .link-row span { font-size: 14px; font-weight: 500; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 600;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 100;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .muted { color: var(--muted); }
+  .row-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark">T+</div>
+      <div>
+        <h1>Technion Study Hub</h1>
+        <div class="brand-sub">סהר קנדל • חורף תשפ"ז</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="countdown-strip" id="countdownStrip"></div>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="החלף מצב בהיר/כהה" aria-label="החלף מצב תצוגה">☀️</button>
+    </div>
+  </div>
+</header>
+
+<div class="nav-wrap">
+  <nav role="tablist">
+    <button class="tab-btn active" role="tab" onclick="openTab('bank', this)">📚 בנק משפטים</button>
+    <button class="tab-btn" role="tab" onclick="openTab('alg', this)">🎯 תרגול אלגברה HW05</button>
+    <button class="tab-btn" role="tab" onclick="openTab('cards', this)">🃏 כרטיסיות אמצע</button>
+    <button class="tab-btn" role="tab" onclick="openTab('ww', this)">⚡ בודק WeBWorK</button>
+    <button class="tab-btn" role="tab" onclick="openTab('focus', this)">⏱️ פומודורו וטעויות</button>
+    <button class="tab-btn" role="tab" onclick="openTab('hub', this)">🚀 קישורים מהירים</button>
+  </nav>
+</div>
+
+<main>
+  <!-- TAB 1: THEOREM & DEFINITION BANK -->
+  <section id="tab-bank" class="tab active">
+    <div class="section-header">
+      <div>
+        <h2>בנק משפטים, הגדרות ונוסחאות</h2>
+        <p>אלגברה 1מ3 (ד"ר אירינה גורליק) + חדו"א 1מ2 (רבקה אביטל) — כולל מלכודות בוחן</p>
+      </div>
+      <div class="progress-meta" id="bankCount"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:18px; padding:16px 18px;">
+      <div class="progress-track">
+        <div class="progress-fill" id="bankBar" style="width:0%"></div>
+      </div>
+      <div class="filter-bar">
+        <input id="bankSearch" type="search" placeholder="חיפוש חופשי (למשל: לופיטל, סכום ישר, היינה, דה מואבר, דרגה, הרכבה)..." oninput="renderBank()" />
+        <select id="bankCourse" onchange="updateTopicFilter(); renderBank()">
+          <option value="all">כל הקורסים</option>
+          <option value="alg">אלגברה 1מ3 (01040067)</option>
+          <option value="calc">חדו"א 1מ2 (01040042)</option>
+        </select>
+        <select id="bankTopic" onchange="renderBank()">
+          <option value="all">כל הנושאים</option>
+        </select>
+        <select id="bankStatus" onchange="renderBank()">
+          <option value="all">כל הסטטוסים</option>
+          <option value="todo">עוד לא שולט</option>
+          <option value="done">שולט בלבד ✅</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid grid-2" id="bankGrid"></div>
+  </section>
+
+  <!-- TAB 2: ALGEBRA HW05 VECTOR SPACES -->
+  <section id="tab-alg" class="tab">
+    <div class="section-header">
+      <div>
+        <h2>אימון אלגברה HW05 — מרחבים ותתי־מרחבים</h2>
+        <p>16 שאלות קלאסיות מסיכומים 5 ו־6: זהה אם W תת־מרחב וקטורי וקבל נימוק או דוגמה נגדית</p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-sm" onclick="shuffleQuiz()">🔀 ערבב שאלות</button>
+        <button class="btn btn-sm" onclick="resetQuiz()">↺ התחל מחדש</button>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="row-between" style="margin-bottom:10px;">
+          <span class="badge badge-alg" id="qProgress">שאלה 1 / 16</span>
+          <span class="muted" style="font-size:13px;">ניקוד: <strong id="qScore" style="color:var(--text);">0</strong> / <strong id="qTotal" style="color:var(--text);">0</strong></span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill primary" id="qBar" style="width:6%"></div>
+        </div>
+
+        <div class="quiz-prompt" id="qPrompt"></div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-ok" onclick="answerQuiz(true)">✅ כן — תת־מרחב וקטורי</button>
+          <button class="btn btn-bad" onclick="answerQuiz(false)">❌ לא תת־מרחב</button>
+          <button class="btn" onclick="nextQuiz()" style="margin-right:auto;">הבא ←</button>
+        </div>
+        <div id="qFeedback"></div>
+      </div>
+
+      <div class="card">
+        <h3>📋 שליף בזק ל־HW05</h3>
+        <div class="callout callout-ok" style="margin-top:0;">
+          <strong>בדיקת תמ"ו ב־3 שניות:</strong>
+          <ul class="cheat-list">
+            <li><code>0_V ∈ W</code> — תמיד לבדוק ראשון!</li>
+            <li>סגירות לחיבור: <code>u, w ∈ W ⇒ u + w ∈ W</code></li>
+            <li>סגירות לכפל בסקלר: <code>α ∈ F, w ∈ W ⇒ αw ∈ W</code></li>
+          </ul>
+        </div>
+        <div class="callout callout-warn">
+          <strong>מלכודות קלאסיות בבוחן:</strong>
+          <ul class="cheat-list">
+            <li><code>R^n</code> מעל <code>C</code> <strong>לא</strong> מ"ו (כי <code>i·1 ∉ R</code>), אבל <code>C^n</code> מעל <code>R</code> <strong>כן</strong>.</li>
+            <li><code>deg(p) = n</code> <strong>לא</strong> תמ"ו; רק <code>deg(p) ≤ n</code> (כולל פולינום האפס) הוא תמ"ו.</li>
+            <li><code>Ax = 0</code> תמיד תמ"ו; <code>Ax = b</code> עם <code>b ≠ 0</code> לעולם לא תמ"ו.</li>
+            <li><code>U ∩ W</code> תמיד תמ"ו; <code>U ∪ W</code> תמ"ו <strong>אמ"ם</strong> <code>U ⊆ W</code> או <code>W ⊆ U</code>.</li>
+            <li><code>U ⊕ W</code> (סכום ישר) <strong>אמ"ם</strong> <code>U ∩ W = {0}</code>.</li>
+            <li>ל־<code>Ax = b</code> יש פתרון <strong>אמ"ם</strong> <code>b</code> צ"ל של <strong>עמודות</strong> <code>A</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 3: FLASHCARDS -->
+  <section id="tab-cards" class="tab">
+    <div class="flashcard-shell">
+      <div class="section-header">
+        <div>
+          <h2>כרטיסיות חזרה לבחני האמצע</h2>
+          <p>לחץ על הכרטיסייה או על <code>Space</code> להצגת התשובה</p>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <select id="deckSelect" style="width:auto;" onchange="loadDeck()">
+            <option value="all">כל הקורסים</option>
+            <option value="calc">חדו"א 1מ2 (14.12)</option>
+            <option value="alg">אלגברה 1מ3 (29.12)</option>
+            <option value="eng">אנגלית מתקדמים ב' (03.01)</option>
+            <option value="ie">מבוא לתעו"נ (00940101)</option>
+            <option value="cs">מבוא למדמ"ח (02340221)</option>
+          </select>
+          <button class="chip" id="onlyUnmasteredBtn" onclick="toggleUnmastered()">רק לחזרה</button>
+          <button class="btn btn-sm" onclick="resetMastery()">↺ איפוס</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="progress-track" style="margin-bottom:18px;">
+          <div class="progress-fill" id="cardBar" style="width:0%"></div>
+        </div>
+
+        <div class="flashcard" id="flashcardEl" onclick="flipCard()">
+          <div class="badge badge-alg" id="cardCourse"></div>
+          <div class="flashcard-face" id="cardFace"></div>
+          <div class="flashcard-hint" id="cardHint"></div>
+        </div>
+
+        <div class="row-between" style="margin-top:18px;">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn btn-ok" onclick="markCard(true)">✅ שולט</button>
+            <button class="btn btn-warn" onclick="markCard(false)">🔁 לחזור שוב</button>
+            <button class="btn" onclick="prevCard()">→ הקודם</button>
+            <button class="btn" onclick="nextCard()">הבא ←</button>
+          </div>
+          <div class="muted" style="font-size:13px;" id="cardStats"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 4: WEBWORK SYNTAX VALIDATOR -->
+  <section id="tab-ww" class="tab">
+    <div class="section-header">
+      <div>
+        <h2>בודק תחביר WeBWorK</h2>
+        <p>בדיקת שגיאות נפוצות לפני שליחת תשובה ובזבוז ניסיון</p>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>הדבק או הקלד ביטוי לבדיקה</h3>
+        <textarea id="wwInput" rows="5" class="ltr mono" style="font-size:15px;" placeholder="Example: (2*x + sqrt(x^2 + 1)) / ln(x)   or   (-inf, 3] U (5, inf)" oninput="checkWW()"></textarea>
+        <div class="chips" style="margin-top:12px;">
+          <button class="chip mono" onclick="insertWW('sqrt()')">sqrt()</button>
+          <button class="chip mono" onclick="insertWW('ln()')">ln()</button>
+          <button class="chip mono" onclick="insertWW('e^()')">e^()</button>
+          <button class="chip mono" onclick="insertWW('pi')">pi</button>
+          <button class="chip mono" onclick="insertWW('(-inf, ) U (, inf)')">(-inf, a) U (b, inf)</button>
+          <button class="chip mono" onclick="insertWW('DNE')">DNE</button>
+          <button class="chip mono" onclick="insertWW('NONE')">NONE</button>
+          <button class="chip mono" onclick="insertWW('< , , >')">&lt;x, y, z&gt;</button>
+          <button class="btn btn-primary btn-sm" onclick="copyWW()">📋 העתק</button>
+        </div>
+        <div id="wwResults"></div>
+      </div>
+
+      <div class="card">
+        <h3>קיצורי תחביר שימושיים</h3>
+        <div class="link-list">
+          <div class="link-row"><span>שורש ריבועי / n־י</span><code>sqrt(x) , x^(1/3)</code></div>
+          <div class="link-row"><span>לוגריתם טבעי</span><code>ln(x)</code></div>
+          <div class="link-row"><span>אקספוננט</span><code>e^(-x^2) | exp(-x^2)</code></div>
+          <div class="link-row"><span>ערך מוחלט / טריגו הפוכה</span><code>abs(x) , arcsin(x) , arctan(x)</code></div>
+          <div class="link-row"><span>אינסוף / לא קיים</span><code>inf , -inf , DNE , NONE</code></div>
+          <div class="link-row"><span>איחוד קטעים</span><code>(-inf, 2] U (4, inf)</code></div>
+          <div class="link-row"><span>רשימה / וקטור</span><code>1, -2, 3 | &lt;1, 0, -2&gt;</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 5: POMODORO + MISTAKE LOG -->
+  <section id="tab-focus" class="tab">
+    <div class="section-header">
+      <div>
+        <h2>פומודורו ויומן טעויות</h2>
+        <p>עבודה בסבבי ריכוז ותיעוד מהיר של טעויות כדי לא לחזור עליהן בבוחן</p>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="row-between">
+          <h3 style="margin:0;">⏱️ טיימר ריכוז</h3>
+          <span class="badge">סשנים שהושלמו: <strong id="pomoCount" style="margin-right:4px;">0</strong></span>
+        </div>
+        <div class="chips" style="margin-top:14px; justify-content:center;">
+          <button class="chip" onclick="setTimer(25)">25 דק' למידה</button>
+          <button class="chip" onclick="setTimer(50)">50 דק' עומק</button>
+          <button class="chip" onclick="setTimer(5)">5 דק' הפסקה</button>
+          <button class="chip" onclick="setTimer(10)">10 דק' הפסקה</button>
+        </div>
+        <div class="timer-box">
+          <div class="timer-display" id="timerDisplay">25:00</div>
+          <div class="progress-track" style="max-width:340px; margin:0 auto 20px;">
+            <div class="progress-fill primary" id="timerBar" style="width:100%"></div>
+          </div>
+          <div style="display:flex; justify-content:center; gap:10px;">
+            <button class="btn btn-primary" onclick="startTimer()">▶ התחל</button>
+            <button class="btn" onclick="pauseTimer()">⏸ השהה</button>
+            <button class="btn" onclick="resetTimer()">↺ אפס</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>📝 יומן טעויות אישי</h3>
+        <div style="display:grid; gap:9px;">
+          <select id="mCourse">
+            <option value="אלגברה 1מ3">אלגברה 1מ3 (01040067)</option>
+            <option value="חדו&quot;א 1מ2">חדו"א 1מ2 (01040042)</option>
+            <option value="מבוא למדמ&quot;ח">מבוא למדמ"ח (02340221)</option>
+            <option value="מבוא לתעו&quot;נ">מבוא לתעו"נ (00940101)</option>
+            <option value="אנגלית מתקדמים ב'">אנגלית מתקדמים ב' (03240033)</option>
+          </select>
+          <input id="mTopic" placeholder="שאלה / נושא (למשל: כלל לופיטל באינסוף)" />
+          <textarea id="mLesson" rows="2" placeholder="מה הייתה הטעות ומה הלקח לפעם הבאה?"></textarea>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-primary" onclick="addMistake()">➕ הוסף ליומן</button>
+            <button class="btn" onclick="exportMistakes()">📋 העתק כ־Markdown</button>
+          </div>
+        </div>
+        <div id="mistakeList" style="margin-top:16px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 6: QUICK LINKS -->
+  <section id="tab-hub" class="tab">
+    <div class="section-header">
+      <div>
+        <h2>קישורים מהירים לכל הקורסים</h2>
+        <p>גישה ישירה לפורטלי הטכניון, Drive, מדריכי הבחנים ומחברות NotebookLM</p>
+      </div>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>🎓 פורטלי הטכניון</h3>
+        <div class="link-list">
+          <div class="link-row"><span>WeBWorK אלגברה 1מ3</span><a class="btn btn-primary btn-sm" target="_blank" rel="noopener" href="https://moodle26.technion.ac.il/mod/lti/view.php?id=68547">פתח ↗</a></div>
+          <div class="link-row"><span>WeBWorK חדו"א 1מ2</span><a class="btn btn-primary btn-sm" target="_blank" rel="noopener" href="https://moodle26.technion.ac.il/mod/lti/view.php?id=67571">פתח ↗</a></div>
+          <div class="link-row"><span>Moodle אלגברה (618)</span><a class="btn btn-sm" target="_blank" rel="noopener" href="https://moodle26.technion.ac.il/course/view.php?id=618">פתח ↗</a></div>
+          <div class="link-row"><span>Moodle חדו"א (613)</span><a class="btn btn-sm" target="_blank" rel="noopener" href="https://moodle26.technion.ac.il/course/view.php?id=613">פתח ↗</a></div>
+          <div class="link-row"><span>Moodle תעו"נ (525)</span><a class="btn btn-sm" target="_blank" rel="noopener" href="https://moodle26.technion.ac.il/course/view.php?id=525">פתח ↗</a></div>
+          <div class="link-row"><span>Moodle אנגלית (1011)</span><a class="btn btn-sm" target="_blank" rel="noopener" href="https://moodle26.technion.ac.il/course/view.php?id=1011">פתח ↗</a></div>
+          <div class="link-row"><span>WebCourse מדמ"ח</span><a class="btn btn-sm" target="_blank" rel="noopener" href="https://webcourse.cs.technion.ac.il/02340221/Winter2026-2027/ev.html">פתח ↗</a></div>
+          <div class="link-row"><span>CS GR (הגשות וציונים)</span><a class="btn btn-sm" target="_blank" rel="noopener" href="https://grades.cs.technion.ac.il/">פתח ↗</a></div>
+          <div class="link-row"><span>Outlook טכניון</span><a class="btn btn-sm" target="_blank" rel="noopener" href="https://outlook.cloud.microsoft/mail/">פתח ↗</a></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>📁 Drive ומסמכי לימוד</h3>
+        <div class="link-list">
+          <div class="link-row"><span>תיקיית הסמסטר (Google Drive)</span><a class="btn btn-ok btn-sm" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1C0AEbdpb-0h6ihySGMwCAcF3bOAAbixa">פתח ↗</a></div>
+          <div class="link-row"><span>לוח בקרה מרכזי</span><a class="btn btn-sm" target="_blank" rel="noopener" href="https://docs.google.com/document/d/13f2jsBjiOcx37WD8axY-mbC7SWNxEY0Y05U5KmxOZKQ/edit">פתח ↗</a></div>
+          <div class="link-row"><span>בנק משפטים (Google Docs)</span><a class="btn btn-sm" target="_blank" rel="noopener" href="https://docs.google.com/document/d/1Kd21XbD_4LWfc7mW1R8au5b_3qAs6_c_e3VYpRfN8x4/edit">פתח ↗</a></div>
+          <div class="link-row"><span>מדריך בוחן אמצע — חדו"א</span><a class="btn btn-sm" target="_blank" rel="noopener" href="https://docs.google.com/document/d/1mUMkLcbCn3WGtFO9l1wkmeIlXWXqAMOw-TamuDxdnBo/edit">פתח ↗</a></div>
+          <div class="link-row"><span>מדריך בוחן אמצע — אלגברה</span><a class="btn btn-sm" target="_blank" rel="noopener" href="https://docs.google.com/document/d/1xsK0sumzcWIW-aPnOkC5nxy0NNMFWPeDvoQ0k52WWrQ/edit">פתח ↗</a></div>
+          <div class="link-row"><span>מדריך בוחן אמצע — אנגלית</span><a class="btn btn-sm" target="_blank" rel="noopener" href="https://docs.google.com/document/d/1SyoefPG22E_996rwPe5YY9cDAAeMKqwKT2YfGSxu1rs/edit">פתח ↗</a></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🧠 מחברות NotebookLM</h3>
+        <div class="link-list">
+          <div class="link-row"><span>חדו"א 1מ2 (01040042)</span><a class="btn btn-primary btn-sm" target="_blank" rel="noopener" href="https://notebook.google.com/notebook/e87b73d3-5c61-4540-9b3b-ea94003b09b2">פתח ↗</a></div>
+          <div class="link-row"><span>אלגברה 1מ3 (01040067)</span><a class="btn btn-primary btn-sm" target="_blank" rel="noopener" href="https://notebook.google.com/notebook/bffad5de-6064-4f27-9189-d14a59afdf3a">פתח ↗</a></div>
+          <div class="link-row"><span>מבוא למדמ"ח (02340221)</span><a class="btn btn-primary btn-sm" target="_blank" rel="noopener" href="https://notebook.google.com/notebook/c201fc19-7f10-4cc2-88e7-38c447320015">פתח ↗</a></div>
+          <div class="link-row"><span>מבוא לתעו"נ (00940101)</span><a class="btn btn-primary btn-sm" target="_blank" rel="noopener" href="https://notebook.google.com/notebook/b9a119e8-a269-4b04-b58b-34808ee909f0">פתח ↗</a></div>
+          <div class="link-row"><span>אנגלית מתקדמים ב' (03240033)</span><a class="btn btn-primary btn-sm" target="_blank" rel="noopener" href="https://notebook.google.com/notebook/87a7c37a-4076-475c-97ae-5f52377da1ed">פתח ↗</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// === SAFE STORAGE (preserves exact localStorage keys) ===
+const _memStore = {};
+function storeGet(k, fallback) {
+  try { const v = localStorage.getItem(k); return v !== null ? v : fallback; }
+  catch (e) { return (k in _memStore) ? _memStore[k] : fallback; }
+}
+function storeSet(k, v) {
+  _memStore[k] = v;
+  try { localStorage.setItem(k, v); } catch (e) {}
+}
+function storeRemove(k) {
+  delete _memStore[k];
+  try { localStorage.removeItem(k); } catch (e) {}
+}
+
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// === THEME ===
+function applyTheme(mode) {
+  const light = mode === 'light';
+  document.body.classList.toggle('light', light);
+  document.getElementById('themeBtn').textContent = light ? '🌙' : '☀️';
+}
+function toggleTheme() {
+  const next = document.body.classList.contains('light') ? 'dark' : 'light';
+  storeSet('tech_theme', next);
+  applyTheme(next);
+}
+applyTheme(storeGet('tech_theme', 'dark'));
+
+// === COUNTDOWNS ===
+const exams = [
+  { name: 'בוחן חדו"א', date: '2026-12-14' },
+  { name: 'בוחן אלגברה', date: '2026-12-29' },
+  { name: 'בוחן אנגלית', date: '2027-01-03' }
+];
+document.getElementById('countdownStrip').innerHTML = exams.map(e => {
+  const diff = Math.ceil((new Date(e.date + 'T00:00:00') - new Date()) / 86400000);
+  return `<div class="exam-pill">${e.name} <strong>${diff >= 0 ? diff + ' ימים' : 'עבר'}</strong></div>`;
+}).join('');
+
+function openTab(id, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// === THEOREM & DEFINITION BANK ===
+const theoremBank = [
+  // ALGEBRA 1: Complex Numbers
+  { id:'t1', c:'alg', topic:'מספרים מרוכבים', kind:'הגדרה', title:'מספר מרוכב, צמוד ומודול', body:'z = a + bi (a,b ∈ R, i² = -1). חלק ממשי Re(z)=a, מדומה Im(z)=b, צמוד z̄ = a - bi, מודול |z| = √(a² + b²). מתקיים z·z̄ = |z|², z + z̄ = 2Re(z), z - z̄ = 2i·Im(z).', trap:'חילוק: z/w = (z·w̄)/|w|². מדומה טהור ⇔ Re(z)=0; ממשי ⇔ Im(z)=0.' },
+  { id:'t2', c:'alg', topic:'מספרים מרוכבים', kind:'משפט', title:'הצגה טריגונומטרית וכפל/חילוק', body:'z = r·cis(θ) כאשר r = |z| ו-a = r·cosθ, b = r·sinθ. עבור w = s·cis(α): מתקיים zw = rs·cis(θ+α), ו-z/w = (r/s)·cis(θ-α).', trap:'צמוד: z̄ = r·cis(-θ). את θ קובעים לפי הרביע (הסימנים של a,b), לא רק לפי arctan(b/a)!' },
+  { id:'t3', c:'alg', topic:'מספרים מרוכבים', kind:'נוסחה', title:'נוסחת דה מואבר והוצאת שורשים', body:'z^n = r^n · cis(nθ). n השורשים של w^n = z הם w_k = r^(1/n) · cis((θ + 2πk)/n) עבור k = 0, 1, ..., n-1.', trap:'לכל z ≠ 0 יש בדיוק n שורשים שונים הפרושים בסימטריה על מעגל ברדיוס r^(1/n).' },
+  { id:'t4', c:'alg', topic:'מספרים מרוכבים', kind:'משפט', title:'שורשי יחידה מסדר n', body:'שורשי x^n - 1 = 0 הם x_k = cis(2πk/n) = ω^k. עבור n > 1: סכום כל שורשי היחידה הוא 0, ומכפלתם היא (-1)^(n+1).', trap:'עבור n = 1: יש שורש אחד (1), ולכן גם הסכום וגם המכפלה שווים 1 (לא 0!). -1 שורש יחידה לכל n זוגי.' },
+
+  // ALGEBRA 2: Polynomials & Fields
+  { id:'t5', c:'alg', topic:'פולינומים ושדות', kind:'הגדרה', title:'מעלת פולינום וחוקי מעלה', body:'deg(p) היא החזקה הגבוהה עם מקדם a_n ≠ 0. לפולינום האפס deg(0) = -∞. מתקיים deg(p±q) ≤ max{deg p, deg q} ו-deg(p·q) = deg(p) + deg(q).', trap:'בחיבור פולינומים המעלה יכולה לרדת אם החזקות המובילות מבטלות זו את זו!' },
+  { id:'t6', c:'alg', topic:'פולינומים ושדות', kind:'משפט', title:'משפט החלוקה עם שארית (בזו)', body:'לכל f(x) ו-h(x) ≠ 0 קיימים פולינומים יחידים d(x), r(x) כך ש-f(x) = d(x)h(x) + r(x) וגם deg(r) < deg(h). מסקנה: a שורש של p אמ"ם (x - a) | p(x).', trap:'שימו לב לתנאי deg(r) < deg(h) (כולל r=0 עם מעלה -∞).' },
+  { id:'t7', c:'alg', topic:'פולינומים ושדות', kind:'משפט', title:'משפט השורש הרציונלי', body:'יהי f(x) = a_n x^n + ... + a_0 עם מקדמים שלמים. אם p/q מצומצם הוא שורש של f, אז p | a_0 וגם q | a_n.', trap:'תקף רק למקדמים שלמים! אם יש מקדמים שבריים — כופלים קודם במכנה המשותף.' },
+  { id:'t8', c:'alg', topic:'פולינומים ושדות', kind:'משפט', title:'ריבוי שורש ונגזרות', body:'a הוא שורש של p מריבוי k ≥ 1 אמ"ם p(a) = p\'(a) = ... = p^(k-1)(a) = 0 וגם p^(k)(a) ≠ 0.', trap:'אם גם הנגזרת ה-k-ית מתאפסת ב-a, הריבוי גדול מ-k!' },
+  { id:'t9', c:'alg', topic:'פולינומים ושדות', kind:'משפט', title:'המשפט היסודי של האלגברה + נוסחאות וייטה', body:'לכל פולינום ממעלה n יש n שורשים ב-C (כולל ריבוי): p(x) = a_n(x-x₁)...(x-x_n). וייטה: x₁+...+x_n = -a_{n-1}/a_n, ומכפלתם (-1)^n · a_0/a_n.', trap:'אל תשכח את הסימן (-1)^n במכפלת השורשים ואת החלוקה ב-a_n!' },
+  { id:'t10', c:'alg', topic:'פולינומים ושדות', kind:'משפט', title:'שורשים צמודים לפולינום ממשי', body:'אם מקדמי p ממשיים אז p(z̄) = p(z)̄. לכן אם z₀ שורש מריבוי r, גם z̄₀ שורש מאותו ריבוי. מסקנה: לפולינום ממשי ממעלה אי-זוגית יש תמיד שורש ממשי.', trap:'תקף רק כשהמקדמים ממשיים! בפולינום עם מקדמים מרוכבים (כמו x - i) אין בהכרח צמוד.' },
+  { id:'t11', c:'alg', topic:'פולינומים ושדות', kind:'הגדרה', title:'שדה F', body:'קבוצה לא ריקה עם חיבור וכפל המקיימת 8 אקסיומות: סגירות, קומוטטיביות, אסוציאטיביות, דיסטריבוטיביות, אדיש חיבורי 0, נגדי -a, אדיש כפלי 1, והפכי a⁻¹ לכל a ≠ 0.', trap:'בקורס עובדים מעל Q, R, C. השלמים Z אינם שדה כי ל-2 אין הפכי שלם.' },
+
+  // ALGEBRA 3: Matrices
+  { id:'t12', c:'alg', topic:'מטריצות', kind:'הגדרה', title:'מטריצה משוחלפת A^t וחוקיה', body:'(A^t)_{ij} = a_{ji}. חוקים: (A+B)^t = A^t + B^t, (A^t)^t = A, (αA)^t = αA^t, (AB)^t = B^t A^t.', trap:'שימו לב להיפוך הסדר: (AB)^t = B^t A^t (לא A^t B^t!).' },
+  { id:'t13', c:'alg', topic:'מטריצות', kind:'הגדרה', title:'מטריצות מיוחדות ועקבה tr(A)', body:'סימטרית: A^t = A. אנטי-סימטרית: A^t = -A (האלכסון הראשי חייב להיות 0!). אלכסונית: a_{ij}=0 ל-i≠j. סקלרית: λI. עקבה: tr(A) = Σ a_{ii} ומקיימת tr(AB) = tr(BA).', trap:'מטריצת האפס היא מכל סוג פרט למטריצת יחידה! במטריצה אלכסונית מותר שיופיעו אפסים באלכסון.' },
+  { id:'t14', c:'alg', topic:'מטריצות', kind:'משפט', title:'כפל מטריצות — לא חילופי ומחלקי אפס', body:'AB מוגדר כשמספר העמודות ב-A שווה למספר השורות ב-B: c_{ij} = Σ_k a_{ik} b_{kj}. אסוציאטיבי ודיסטריבוטיבי, אך בד"כ AB ≠ BA.', trap:'אסור להשתמש בכפל מקוצר (A+B)² = A² + 2AB + B² אלא אם נתון AB = BA! בנוסף AB = 0 לא גורר A=0 או B=0.' },
+
+  // ALGEBRA 4: Linear Systems & Rank
+  { id:'t15', c:'alg', topic:'מערכות משוואות', kind:'משפט', title:'יחידות הצורה המדורגת הקנונית', body:'כל מטריצה שקולת שורות (ע"י 3 הפעולות האלמנטריות: החלפת שורות, כפל בסקלר ≠ 0, הוספת כפולת שורה) למטריצה מדורגת קנונית אחת ויחידה.', trap:'לעולם לא כופלים שורה בביטוי עם פרמטר בלי לפצל למקרה שהוא מתאפס!' },
+  { id:'t16', c:'alg', topic:'מערכות משוואות', kind:'הגדרה', title:'דרגת מטריצה rank(A) ודרגות חופש', body:'rank(A) = מספר השורות השונות מאפס במטריצה מדורגת השקולה ל-A. תמיד rank(A) ≤ min{m, n}. מספר דרגות החופש ב-Ax=b (עם n נעלמים) הוא f = n - rank(A).', trap:'הדרגה נקבעת רק אחרי דירוג! שתי מטריצות בעלות אותה דרגה אינן בהכרח שקולות שורה.' },
+  { id:'t17', c:'alg', topic:'מערכות משוואות', kind:'משפט', title:'מיון פתרונות של Ax = b (משפט הדרגות)', body:'(1) rank(A|b) > rank(A) ⇒ אין פתרון; (2) rank(A|b) = rank(A) < n ⇒ אינסוף פתרונות עם n - rank(A) דרגות חופש; (3) rank(A|b) = rank(A) = n ⇒ פתרון יחיד.', trap:'במערכת הומוגנית Ax = 0 תמיד יש פתרון (x=0). אם m < n (פחות משוואות מנעלמים) תמיד יש אינסוף פתרונות!' },
+  { id:'t18', c:'alg', topic:'מערכות משוואות', kind:'משפט', title:'מבנה הפתרונות של מערכת אי-הומוגנית (u + W)', body:'אם u פתרון פרטי של Ax = b ו-W אוסף הפתרונות של Ax = 0, אז אוסף הפתרונות של Ax = b הוא u + W = {u + w | w ∈ W}. בפרט: אם u,v פתרונות של Ax=b אז u-v פותר את Ax=0.', trap:'אוסף הפתרונות של Ax = b (כאשר b ≠ 0) אינו תת-מרחב וקטורי כי 0 אינו פתרון!' },
+
+  // ALGEBRA 5: Vector Spaces & Subspaces
+  { id:'t19', c:'alg', topic:'מרחבים וקטוריים', kind:'הגדרה', title:'מרחב וקטורי (מ"ו) — 10 האקסיומות', body:'V מעל שדה F עם חיבור וכפל בסקלר: סגירות לחיבור, חילוף, קיבוץ, קיום 0_V, קיום נגדי -v, סגירות לכפל בסקלר, α(u+v)=αu+αv, (α+β)v=αv+βv, (αβ)v=α(βv), ו-1·v=v.', trap:'תמיד לבדוק מהו השדה F! R מעל C אינו מ"ו, אך C מעל R כן. תכונות בסיסיות: 0·v = 0_V, α·0_V = 0_V, αv = 0_V ⇒ α=0 או v=0_V.' },
+  { id:'t20', c:'alg', topic:'מרחבים וקטוריים', kind:'משפט', title:'קריטריון תת-מרחב וקטורי (תמ"ו)', body:'W ⊆ V הוא תמ"ו של V מעל F אם"ם: (1) 0_V ∈ W (או W ≠ ∅), (2) לכל w₁,w₂ ∈ W ו-α,β ∈ F מתקיים αw₁ + βw₂ ∈ W (או בדיקה נפרדת לסגירות לחיבור ולכפל בסקלר).', trap:'תמיד מתחילים מ-0_V ∈ W! אוסף הפתרונות של Ax = 0 תמיד תמ"ו.' },
+  { id:'t21', c:'alg', topic:'מרחבים וקטוריים', kind:'משפט', title:'חיתוך, איחוד וסכום של תתי-מרחבים', body:'יהיו U, W תמ"ו של V: החיתוך U ∩ W והסכום U + W = {u+w} הם תמיד תמ"ו. האיחוד U ∪ W הוא תמ"ו אם ורק אם U ⊆ W או W ⊆ U.', trap:'דוגמה נגדית לאיחוד: ציר x וציר y ב-R² — שניהם תמ"ו אך (1,0)+(0,1)=(1,1) לא באיחוד.' },
+  { id:'t22', c:'alg', topic:'מרחבים וקטוריים', kind:'משפט', title:'סכום ישר U ⊕ W', body:'U + W נקרא סכום ישר (U ⊕ W) אם לכל איבר בו יש הצגה יחידה כ-u + w. משפט: U + W הוא סכום ישר אמ"ם U ∩ W = {0_V}.', trap:'שימו לב: U ∩ W = {0_V}, לא קבוצה ריקה ∅ (כי 0_V תמיד בשניהם!).' },
+
+  // ALGEBRA 6: Linear Combinations & Span
+  { id:'t23', c:'alg', topic:'צירופים לינאריים', kind:'הגדרה', title:'צירוף לינארי ופרישה span(S)', body:'u = α₁v₁ + ... + α_k v_k. המרחב הנפרש span(S) הוא אוסף כל הצ"ל של S, והוא התמ"ו הקטן ביותר של V המכיל את S. טענה: ל-Ax = b יש פתרון אמ"ם b צ"ל של עמודות A.', trap:'וקטור האפס 0_V הוא תמיד צ"ל של כל קבוצה (בחירת כל הסקלרים = 0).' },
+  { id:'t24', c:'alg', topic:'צירופים לינאריים', kind:'משפט', title:'מרחב נוצר סופית ושוויון פרישות', body:'V נוצר סופית אם קיימת S סופית ש-sp(S)=V (טענה: F[x] אינו נוצר סופית!). sp(S) ⊆ sp(S\') אמ"ם כל v_i ∈ S הוא צ"ל של S\'. מסקנה: sp({v₁,...,v_k, u}) = sp({v₁,...,v_k}) אמ"ם u צ"ל של v₁,...,v_k.', trap:'מסקנה זו היא הבסיס להסרת וקטורים "מיותרים" מקבוצה פורשת!' },
+
+  // CALCULUS 1 & 6: Definitions of Limit
+  { id:'c1', c:'calc', topic:'הגדרות גבול', kind:'הגדרה', title:'הגדרת גבול סופי בנקודה (אפסילון-דלתא)', body:'lim_{x→a} f(x) = L אם לכל ε > 0 קיים δ > 0 כך שלכל x המקיים 0 < |x - a| < δ מתקיים |f(x) - L| < ε.', trap:'סביבה מנוקבת (0 < |x-a|)! בחד-צדדי: a < x < a+δ (ימין) או a-δ < x < a (שמאל). בהוכחה עם מכנה תמיד מגבילים קודם δ ≤ 1 ובוחרים min.' },
+  { id:'c2', c:'calc', topic:'הגדרות גבול', kind:'הגדרה', title:'גבול סופי באינסוף וגבול אינסופי', body:'lim_{x→∞} f(x) = L: לכל ε>0 קיים x₀>0 שאם x>x₀ אז |f(x)-L|<ε. lim_{x→a} f(x) = ∞: לכל M>0 קיים δ>0 שאם 0<|x-a|<δ אז f(x) > M. (למינוס אינסוף: לכל M<0 מתקיים f(x) < M).', trap:'אל תתבלבל בין כמת "לכל ε > 0 קיים δ > 0" לבין הסדר ההפוך!' },
+  { id:'c3', c:'calc', topic:'הגדרות גבול', kind:'הגדרה', title:'הגדרת גבול של סדרה (דף 6)', body:'lim_{n→∞} a_n = L אם לכל ε > 0 קיים N > 0 כך שאם n > N אז |a_n - L| < ε. ל-∞: לכל M > 0 קיים N > 0 שאם n > N אז a_n > M.', trap:'עבור גבול -∞ לוקחים לכל M < 0 ש-a_n < M.' },
+
+  // CALCULUS 2: Fundamental Limit Theorems
+  { id:'c4', c:'calc', topic:'משפטי יסוד בגבולות', kind:'משפט', title:'יחידות הגבול ועקרון המקומיות', body:'הגבול (גם במובן הרחב) הוא יחיד. עקרון המקומיות: אם f(x) = g(x) בסביבה מנוקבת של a (או בקרן), אז הגבולות שלהן קיימים במובן הרחב ושווים יחד.', trap:'מאפשר לצמצם גורמים כמו (x-a)/(x-a) בתוך גבול כי x ≠ a בסביבה מנוקבת!' },
+  { id:'c5', c:'calc', topic:'משפטי יסוד בגבולות', kind:'משפט', title:'התכנסות גוררת חסימות', body:'אם lim f(x) קיים וסופי (בנקודה / חד-צדדי / אינסוף), אז קיימת סביבה מנוקבת (או קרן) שבה |f(x)| ≤ M.', trap:'הכיוון ההפוך שגוי! sin(1/x) חסומה ב-(-1,1) אך אין לה גבול ב-0. כמו כן אם הגבול הוא ∞ הפונקציה אינה חסומה!' },
+  { id:'c6', c:'calc', topic:'משפטי יסוד בגבולות', kind:'משפט', title:'תכונות הסדר של גבולות', body:'נניח lim f = L, lim g = M (יכולים להיות אינסופיים): (1) אם L < M אז קיימת סביבה מנוקבת שבה f(x) < g(x). (2) אם f(x) ≤ g(x) בסביבה מנוקבת אז L ≤ M.', trap:'גם אם f(x) < g(x) ממש, בגבול מקבלים L ≤ M (אי-שוויון חלש בלבד)! מקרה פרטי: אם L > 0 אז f(x) > 0 בסביבה מנוקבת.' },
+  { id:'c7', c:'calc', topic:'משפטי יסוד בגבולות', kind:'משפט', title:'גבול של ערך מוחלט', body:'lim f = L ⇒ lim |f| = |L|. וכן lim f = L ⇔ lim |f - L| = 0, ובפרט lim f = 0 ⇔ lim |f| = 0. אם lim f = ±∞ אז lim |f| = ∞.', trap:'ל-L ≠ 0 הכיוון ההפוך שגוי! ל-f(x) = x/|x| מתקיים |f(x)| → 1 ב-0 אך ל-f אין גבול ב-0.' },
+  { id:'c8', c:'calc', topic:'משפטי יסוד בגבולות', kind:'משפט', title:'חשבון גבולות (אריתמטיקה)', body:'עבור גבולות סופיים lim f = L, lim g = M: lim(f+g)=L+M, lim(fg)=LM, lim(f/g)=L/M (כש-M ≠ 0), lim(f^g)=L^M (כש-L > 0).', trap:'אסור לפצל גבול של סכום/מכפלה לפני שמוודאים שכל גבול בנפרד קיים וסופי!' },
+  { id:'c9', c:'calc', topic:'משפטי יסוד בגבולות', kind:'משפט', title:'משפט הסנדוויץ\' (כולל פיצה) וחסומה כפול אפסה', body:'אם f ≤ g ≤ h בסביבה מנוקבת ו-lim f = lim h = L אז lim g = L. לאינסוף: f ≤ g ו-lim f = ∞ ⇒ lim g = ∞. חסומה×אפסה: אם f חסומה בסביבה מנוקבת ו-lim g = 0 אז lim f·g = 0.', trap:'אין צורך שלפונקציה החסומה f יהיה גבול (למשל sin(1/x) · x → 0 ב-0)!' },
+
+  // CALCULUS 3: Composition
+  { id:'c10', c:'calc', topic:'גבול של הרכבה', kind:'משפט', title:'גבול של הרכבה g(f(x)) — כל המקרים', body:'אם lim_{x→a} f(x) = L (סופי) ו-lim_{y→L} g(y) = K, אז lim_{x→a} g(f(x)) = K בתנאי ש: (1) f(x) ≠ L בסביבה מנוקבת של a, או (2) g רציפה ב-L (כלומר K = g(L)). אם f(x) → ±∞ אין צורך בתנאי נוסף!', trap:'מלכודת מס\' 1 בבוחן! אם f(x) = L אינסוף פעמים קרוב ל-a ו-g לא רציפה ב-L — ההרכבה נכשלת!' },
+  { id:'c11', c:'calc', topic:'גבול של הרכבה', kind:'משפט', title:'הרכבה חד-צדדית (L+ / L-)', body:'אם lim f(x) = L וגם f(x) > L בסביבה מנוקבת (למשל f(x)=x² ב-0), מספיק ש-lim_{y→L+} g(y) = K כדי ש-lim g(f(x)) = K (ובדומה ל-f(x) < L ו-L-).', trap:'שימו לב אם f(x) ≥ L (כולל שוויון) — אז דרושה רציפות ימנית lim_{y→L+} g(y) = g(L)!' },
+
+  // CALCULUS 4: Extended Limits
+  { id:'c12', c:'calc', topic:'חשבון גבולות מורחב', kind:'נוסחה', title:'כללי גבולות באינסוף וב-0+/0-', body:'∞ + חסומה = ∞; חסומה / (±∞) = 0; ל-L>0: L/0+ = ∞, L/0- = -∞, ∞^L = ∞, (0+)^L = 0; ל-0<L<1: L^∞ = 0, L^(-∞) = ∞; ל-L>1: L^∞ = ∞, L^(-∞) = 0.', trap:'הכוונה ב-0+ היא f(x) → 0 ו-f(x) > 0 ממש בסביבה (לא 0!).' },
+  { id:'c13', c:'calc', topic:'חשבון גבולות מורחב', kind:'הגדרה', title:'7 צורות אי-הודאות (גבולות לא מוגדרים)', body:'∞ - ∞ , 0 · (±∞) , (±∞)/(±∞) , 0/0 (ו-L/0 ללא סימן) , 0⁰ , 1^(±∞) , ∞⁰.', trap:'לעולם לא רושמים "1^∞ = 1"! צורות חזקה (1^∞, 0^0, ∞^0) מעבירים ל-e^(g(x)·ln(f(x))).' },
+
+  // CALCULUS 5, 7, 8, 9: Monotone, Heine, L'Hopital, Integrals
+  { id:'c14', c:'calc', topic:'מונוטוניות, היינה ולופיטל', kind:'משפט', title:'גבול של פונקציה מונוטונית (דף 5)', body:'אם f עולה ב-(a,b): חסומה מלמעלה ⇒ lim_{x→b-} f(x) = sup f; לא חסומה מלמעלה ⇒ ∞. לכל x₀ פנימית ב-I קיימים שני הגבולות החד-צדדיים ומתקיים lim_{x→x₀-} f ≤ f(x₀) ≤ lim_{x→x₀+} f.', trap:'עבור פונקציה יורדת הסימנים ו-sup/inf מתהפכים. זה גם המקביל הרציף לסדרה מונוטונית וחסומה!' },
+  { id:'c15', c:'calc', topic:'מונוטוניות, היינה ולופיטל', kind:'משפט', title:'משפט היינה (כל המקרים — דף 7)', body:'lim_{x→a} f(x) = L (סופי או ±∞) אמ"ם לכל סדרה x_n → a המקיימת x_n ≠ a מתקיים f(x_n) → L. (בגבול ימני דורשים x_n > a, בשמאלי x_n < a, באינסוף x_n → ∞).', trap:'שימוש עיקרי: הוכחת אי-קיום גבול ע"י בחירת שתי סדרות x_n, y_n → a שנותנות גבולות שונים!' },
+  { id:'c16', c:'calc', topic:'מונוטוניות, היינה ולופיטל', kind:'משפט', title:'כלל לופיטל — כל 4 התנאים (דף 8)', body:'בסביבה מנוקבת של a (או בקרן): (1) f, g גזירות, (2) g\'(x) ≠ 0, (3) lim f = lim g = 0 או ±∞, (4) lim f\'/g\' קיים במובן הרחב ⇒ lim f/g = lim f\'/g\'.', trap:'מלכודת קלאסית! אם lim f\'/g\' לא קיים, אסור להסיק ש-lim f/g לא קיים (למשל (x+sinx)/x באינסוף = 1 אבל f\'/g\' = 1+cosx מתבדר!).' },
+  { id:'c17', c:'calc', topic:'מונוטוניות, היינה ולופיטל', kind:'נוסחה', title:'טבלת אינטגרלים מיידיים (דף 9)', body:'∫x^a dx = x^(a+1)/(a+1) (a≠-1) ו-ln|x| (a=-1); ∫a^x dx = a^x/ln(a); ∫dx/cos²x = tanx; ∫dx/sin²x = -cotx; ∫dx/√(a²-x²) = arcsin(x/a); ∫dx/(x²+a²) = (1/a)arctan(x/a); ∫(f\'/f)dx = ln|f(x)|.', trap:'זכור את הקבוע +C, את הערך המוחלט ב-ln|x|, ואת המקדם 1/a ב-arctan (אין 1/a ב-arcsin!).' }
+];
+
+let bankDone = JSON.parse(storeGet('tech_bank_done', '{}'));
+function updateTopicFilter() {
+  const c = document.getElementById('bankCourse').value;
+  const topics = [...new Set(theoremBank.filter(x => c === 'all' || x.c === c).map(x => x.topic))];
+  const sel = document.getElementById('bankTopic');
+  sel.innerHTML = '<option value="all">כל הנושאים</option>' + topics.map(t => `<option value="${t}">${t}</option>`).join('');
+}
+function toggleBankDone(id) {
+  bankDone[id] = !bankDone[id];
+  storeSet('tech_bank_done', JSON.stringify(bankDone));
+  renderBank();
+}
+function renderBank() {
+  const q = document.getElementById('bankSearch').value.trim().toLowerCase();
+  const c = document.getElementById('bankCourse').value;
+  const t = document.getElementById('bankTopic').value;
+  const st = document.getElementById('bankStatus').value;
+  const list = theoremBank.filter(x =>
+    (c === 'all' || x.c === c) &&
+    (t === 'all' || x.topic === t) &&
+    (st === 'all' || (st === 'done' ? !!bankDone[x.id] : !bankDone[x.id])) &&
+    (!q || (x.title + ' ' + x.body + ' ' + x.trap + ' ' + x.topic).toLowerCase().includes(q))
+  );
+  const doneCnt = theoremBank.filter(x => bankDone[x.id]).length;
+  const pct = Math.round((doneCnt / theoremBank.length) * 100);
+  document.getElementById('bankBar').style.width = pct + '%';
+  document.getElementById('bankCount').innerHTML = `<span>מוצגים <strong>${list.length}</strong> / ${theoremBank.length}</span><span>•</span><span>שולט ב־<strong>${doneCnt}</strong> (${pct}%)</span>`;
+  document.getElementById('bankGrid').innerHTML = list.map(x => `
+    <article class="thm-card ${bankDone[x.id] ? 'done' : ''}">
+      <div class="thm-head">
+        <div class="thm-tags">
+          <span class="badge ${x.c === 'alg' ? 'badge-alg' : 'badge-calc'}">${x.c === 'alg' ? 'אלגברה 1מ3' : 'חדו"א 1מ2'}</span>
+          <span class="badge">${x.topic}</span>
+          <span class="badge badge-kind">${x.kind}</span>
+        </div>
+        <button class="chip ${bankDone[x.id] ? 'active' : ''}" onclick="toggleBankDone('${x.id}')">${bankDone[x.id] ? '✅ שולט' : 'סמן כשולט'}</button>
+      </div>
+      <div class="thm-title">${x.title}</div>
+      <div class="thm-body">${x.body}</div>
+      <div class="thm-trap"><strong>⚠️ מלכודת בוחן:</strong> ${x.trap}</div>
+    </article>
+  `).join('') || '<div class="card" style="grid-column:1/-1; text-align:center;"><p class="muted">לא נמצאו משפטים תואמים לסינון הזה.</p></div>';
+}
+updateTopicFilter();
+renderBank();
+
+// === ALGEBRA HW05 QUIZ ===
+const baseQuizData = [
+  { q: 'W = { (x, y, z) ∈ R³ | 2x - 3y + z = 0 } מעל R', ans: true, exp: 'כן! אוסף פתרונות של מערכת הומוגנית Ax = 0 הוא תמיד תמ"ו (סיכום 5).' },
+  { q: 'W = { (x, y, z) ∈ R³ | x + y + z = 1 } מעל R', ans: false, exp: 'לא! וקטור האפס (0,0,0) לא מקיים 0+0+0=1 ולכן 0 ∉ W.' },
+  { q: 'W = { (x, y) ∈ R² | x·y = 0 } מעל R', ans: false, exp: 'לא! אין סגירות לחיבור: (1,0) ו-(0,1) ב-W, אך סכומם (1,1) ∉ W.' },
+  { q: 'W = { p(x) ∈ R[x] | deg(p) = 3 } מעל R', ans: false, exp: 'לא! פולינום האפס לא בפנים, וגם סכום יכול להוריד מעלה: (x³+1)+(-x³+2)=3.' },
+  { q: 'W = { p(x) ∈ R₃[x] | p(2) = 0 } מעל R', ans: true, exp: 'כן! 0(2)=0 ו-(αp+βq)(2) = α·0 + β·0 = 0.' },
+  { q: 'W = { p(x) ∈ R₃[x] | p(0) = 1 } מעל R', ans: false, exp: 'לא! פולינום האפס לא בפנים כי 0(0) = 0 ≠ 1.' },
+  { q: 'W = { A ∈ R^(n×n) | tr(A) = 0 } מעל R', ans: true, exp: 'כן! tr(0)=0 ו-tr(αA+βB) = α·tr(A)+β·tr(B) = 0.' },
+  { q: 'W = { A ∈ R^(n×n) | A = A^t } (מטריצות סימטריות) מעל R', ans: true, exp: 'כן! 0^t=0 ו-(αA+βB)^t = αA+βB.' },
+  { q: 'W = { A ∈ R^(2×2) | A הפיכה } מעל R', ans: false, exp: 'לא! מטריצת האפס אינה הפיכה (וגם I + (-I) = 0 לא הפיכה).' },
+  { q: 'R כקבוצה מעל השדה C', ans: false, exp: 'לא! אין סגירות לכפל בסקלר מ-C: i · 1 = i ∉ R.' },
+  { q: 'C כקבוצה מעל השדה R', ans: true, exp: 'כן! סכום וכפל בסקלר ממשי של מרוכבים נשארים ב-C.' },
+  { q: 'W = { (x, y) ∈ R² | x ≥ 0, y ≥ 0 } מעל R', ans: false, exp: 'לא! אין סגירות לכפל בסקלר שלילי: (-1)·(1,1) = (-1,-1) ∉ W.' },
+  { q: 'יהיו U, W תמ"ו של V. האם U ∩ W בהכרח תמ"ו?', ans: true, exp: 'כן! חיתוך תתי-מרחבים תמיד תמ"ו (סיכום 5).' },
+  { q: 'יהיו U, W תמ"ו של V. האם U ∪ W בהכרח תמ"ו?', ans: false, exp: 'לא! U ∪ W תמ"ו אמ"ם U ⊆ W או W ⊆ U (דוגמה: ציר x וציר y ב-R²).' },
+  { q: 'W = { f: R→R | f(-x) = f(x) } (פונקציות זוגיות) מעל R', ans: true, exp: 'כן! פונקציית האפס זוגית וצירוף לינארי של זוגיות נשאר זוגי.' },
+  { q: 'האם מרחב כל הפולינומים R[x] נוצר סופית?', ans: false, exp: 'לא! קבוצה סופית פורשת רק עד המעלה המקסימלית שבה (סיכום 6).' }
+];
+let quizData = [...baseQuizData];
+let qIdx = 0, qScore = 0, qTotal = 0, qAnswered = false;
+function renderQuiz() {
+  document.getElementById('qProgress').textContent = `שאלה ${qIdx + 1} / ${quizData.length}`;
+  document.getElementById('qBar').style.width = `${Math.round(((qIdx + 1) / quizData.length) * 100)}%`;
+  document.getElementById('qPrompt').textContent = quizData[qIdx].q;
+  document.getElementById('qFeedback').innerHTML = '';
+  document.getElementById('qScore').textContent = qScore;
+  document.getElementById('qTotal').textContent = qTotal;
+  qAnswered = false;
+}
+function answerQuiz(choice) {
+  if (qAnswered) return;
+  qAnswered = true; qTotal++;
+  const ok = (choice === quizData[qIdx].ans);
+  if (ok) qScore++;
+  document.getElementById('qScore').textContent = qScore;
+  document.getElementById('qTotal').textContent = qTotal;
+  document.getElementById('qFeedback').innerHTML = `<div class="callout ${ok ? 'callout-ok' : 'callout-bad'}"><strong>${ok ? 'מדויק! 🎉' : 'שים לב:'}</strong><br>${quizData[qIdx].exp}</div>`;
+}
+function nextQuiz() { qIdx = (qIdx + 1) % quizData.length; renderQuiz(); }
+function shuffleQuiz() {
+  quizData = [...baseQuizData].sort(() => Math.random() - 0.5);
+  qIdx = 0; qScore = 0; qTotal = 0;
+  renderQuiz();
+  showToast('השאלות עורבבו');
+}
+function resetQuiz() {
+  quizData = [...baseQuizData];
+  qIdx = 0; qScore = 0; qTotal = 0;
+  renderQuiz();
+}
+renderQuiz();
+
+// === WEBWORK VALIDATOR ===
+function insertWW(s) {
+  const ta = document.getElementById('wwInput'), a = ta.selectionStart, b = ta.selectionEnd;
+  ta.value = ta.value.slice(0, a) + s + ta.value.slice(b);
+  ta.focus();
+  checkWW();
+}
+function copyWW() {
+  const val = document.getElementById('wwInput').value;
+  if (!val) return;
+  navigator.clipboard && navigator.clipboard.writeText(val).then(() => showToast('הביטוי הועתק ללוח ✓')).catch(() => {});
+}
+function checkWW() {
+  const v = document.getElementById('wwInput').value.trim(), out = document.getElementById('wwResults');
+  if (!v) { out.innerHTML = ''; return; }
+  const errs = [], warns = [];
+  if (/[\u0590-\u05FF]/.test(v)) errs.push('נמצאו אותיות בעברית בתוך הביטוי.');
+  let bal = 0;
+  for (const ch of v) { if (ch === '(') bal++; if (ch === ')') bal--; if (bal < 0) errs.push('סוגר ) מופיע לפני ('); }
+  if (bal !== 0) errs.push(`חוסר איזון בסוגריים (הפרש ${bal}).`);
+  if (/\blog\s*\(/i.test(v)) warns.push('ללוגריתם טבעי עדיף תמיד ln(x) ולא log(x).');
+  if (/∞|\boo\b/.test(v)) errs.push('החלף ∞ או oo ב-inf / -inf.');
+  if (/\^-[a-zA-Z0-9]+|\^[a-zA-Z0-9]+\/[a-zA-Z0-9]+/.test(v)) warns.push('חזקה מורכבת בלי סוגריים — כתוב e^(-x^2) או x^(1/2).');
+  if (/=/.test(v)) warns.push('נמצא סימן = בתשובה — לרוב מזינים רק את הביטוי.');
+  if (/\d\s*\(|\)\s*\(/.test(v)) warns.push('מומלץ לכתוב * מפורש ליד סוגריים.');
+  let html = '';
+  if (errs.length) html += `<div class="callout callout-bad"><strong>❌ שגיאות תחביר:</strong><br>• ${errs.join('<br>• ')}</div>`;
+  if (warns.length) html += `<div class="callout callout-warn"><strong>⚠️ אזהרות:</strong><br>• ${warns.join('<br>• ')}</div>`;
+  if (!errs.length && !warns.length) html += `<div class="callout callout-ok"><strong>✅ התחביר תקין ל־WeBWorK!</strong></div>`;
+  out.innerHTML = html;
+}
+
+// === FLASHCARDS ===
+const allCards = [
+  { id:'c1', d:'calc', c:'חדו"א 1מ2', q:'האם התכנסות גוררת חסימות? ומה הכיוון ההפוך?', a:'התכנסות גוררת חסימות בסביבה מנוקבת. ההפוך שגוי: sin(1/x) חסומה בלי גבול ב-0.' },
+  { id:'c2', d:'calc', c:'חדו"א 1מ2', q:'אם f(x) < g(x) והגבולות קיימים, האם lim f < lim g?', a:'לא! אי-שוויון חלש בלבד: lim f ≤ lim g (דוגמה: -x² < x² ב-0).' },
+  { id:'c3', d:'calc', c:'חדו"א 1מ2', q:'מה התנאי הקריטי במשפט גבול של הרכבה g(f(x))?', a:'או g רציפה ב-L, או f(x) ≠ L בסביבה מנוקבת של a!' },
+  { id:'c4', d:'calc', c:'חדו"א 1מ2', q:'אם lim f\'/g\' לא קיים, האם מותר להסיק של-f/g אין גבול?', a:'לא! כלל לופיטל חד-כיווני. דוגמה: (x+sinx)/x → 1 באינסוף אך 1+cosx מתבדר.' },
+  { id:'a1', d:'alg', c:'אלגברה 1מ3', q:'אם (A+B)² = A² + B², האם בהכרח AB = 0?', a:'לא! התנאי השקול הוא AB + BA = 0 (אנטי-חילופיות).' },
+  { id:'a2', d:'alg', c:'אלגברה 1מ3', q:'אם A² - 2A + I = 0, האם בהכרח A = I?', a:'לא! (A-I)² = 0 ⇒ A-I נילפוטנטית. דוגמה: [[1,1],[0,1]].' },
+  { id:'a3', d:'alg', c:'אלגברה 1מ3', q:'מתי U + W הוא סכום ישר U ⊕ W?', a:'אם ורק אם U ∩ W = {0_V}.' },
+  { id:'a4', d:'alg', c:'אלגברה 1מ3', q:'מתי למערכת Ax = b יש פתרון במונחי צירופים לינאריים?', a:'אם ורק אם b הוא צירוף לינארי של עמודות A.' },
+  { id:'e1', d:'eng', c:'אנגלית 03240033', q:'What is allowed vs forbidden in the Jan 3rd Midterm?', a:'Allowed: book or electronic dictionary ONLY. Forbidden: phones, smartwatches, laptops, tablets.' },
+  { id:'i1', d:'ie', c:'מבוא לתעו"נ', q:'האם הפריט עם יחס רווח/נפח הגבוה ביותר תמיד נכנס בתרמיל 0-1?', a:'לא! נפח 10: פריט 1 (6,7) לעומת פריטים 2,3 (5,5) — 2+3 נותנים רווח 10 > 7.' },
+  { id:'cs1', d:'cs', c:'מבוא למדמ"ח', q:'למה ב-02340221 משתמשים ב-x // 2 ולא x / 2?', a:'כי / מחזיר float שמאבד דיוק ומדפיס .0 — מפיל טסטים ב-GR!' }
+];
+let mastery = JSON.parse(storeGet('tech_mastery', '{}'));
+let currentDeck = [], cardIdx = 0, flipped = false, onlyUnmastered = false;
+
+function toggleUnmastered() {
+  onlyUnmastered = !onlyUnmastered;
+  document.getElementById('onlyUnmasteredBtn').classList.toggle('active', onlyUnmastered);
+  loadDeck();
+}
+function loadDeck() {
+  const f = document.getElementById('deckSelect').value;
+  currentDeck = allCards.filter(c => (f === 'all' || c.d === f) && (!onlyUnmastered || !mastery[c.id]));
+  cardIdx = 0; flipped = false;
+  renderCard();
+}
+function renderCard() {
+  const box = document.getElementById('flashcardEl');
+  const f = document.getElementById('deckSelect').value;
+  const fullDeck = allCards.filter(c => f === 'all' || c.d === f);
+  const masteredCnt = fullDeck.filter(x => mastery[x.id]).length;
+  document.getElementById('cardBar').style.width = `${fullDeck.length ? Math.round((masteredCnt / fullDeck.length) * 100) : 0}%`;
+
+  if (!currentDeck.length) {
+    box.classList.remove('flipped');
+    document.getElementById('cardCourse').textContent = 'כל הכבוד! 🎉';
+    document.getElementById('cardFace').textContent = 'שולט בכל הכרטיסיות בסינון הנוכחי.';
+    document.getElementById('cardHint').textContent = 'כבה את הסינון "רק לחזרה" או אפס שליטה כדי לתרגל שוב.';
+    document.getElementById('cardStats').textContent = `שולט ב־${masteredCnt}/${fullDeck.length}`;
+    return;
+  }
+  const c = currentDeck[cardIdx];
+  box.classList.toggle('flipped', flipped);
+  document.getElementById('cardCourse').textContent = `${c.c}${mastery[c.id] ? ' • שולט ✅' : ''}`;
+  document.getElementById('cardFace').textContent = flipped ? c.a : c.q;
+  document.getElementById('cardHint').textContent = flipped ? 'תשובה — לחץ לחזרה לשאלה' : 'שאלה — לחץ (או Space) להצגת התשובה';
+  document.getElementById('cardStats').textContent = `כרטיסייה ${cardIdx + 1}/${currentDeck.length} • שולט ב־${masteredCnt}/${fullDeck.length}`;
+}
+function flipCard() { if (!currentDeck.length) return; flipped = !flipped; renderCard(); }
+function markCard(ok) {
+  if (!currentDeck.length) return;
+  mastery[currentDeck[cardIdx].id] = ok;
+  storeSet('tech_mastery', JSON.stringify(mastery));
+  if (onlyUnmastered && ok) { loadDeck(); return; }
+  nextCard();
+}
+function nextCard() { if (!currentDeck.length) return; cardIdx = (cardIdx + 1) % currentDeck.length; flipped = false; renderCard(); }
+function prevCard() { if (!currentDeck.length) return; cardIdx = (cardIdx - 1 + currentDeck.length) % currentDeck.length; flipped = false; renderCard(); }
+function resetMastery() { mastery = {}; storeRemove('tech_mastery'); loadDeck(); showToast('השליטה בכרטיסיות אופסה'); }
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('tab-cards').classList.contains('active')) return;
+  if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
+  if (e.code === 'Space') { e.preventDefault(); flipCard(); }
+  else if (e.code === 'ArrowLeft') { e.preventDefault(); nextCard(); }
+  else if (e.code === 'ArrowRight') { e.preventDefault(); prevCard(); }
+});
+loadDeck();
+
+// === POMODORO & MISTAKES ===
+let baseSecs = 1500, remSecs = 1500, timerId = null;
+let pomoDone = Number(storeGet('tech_pomo_done', '0'));
+document.getElementById('pomoCount').textContent = pomoDone;
+
+function drawTimer() {
+  const txt = `${String(Math.floor(remSecs / 60)).padStart(2, '0')}:${String(remSecs % 60).padStart(2, '0')}`;
+  document.getElementById('timerDisplay').textContent = txt;
+  document.getElementById('timerBar').style.width = `${baseSecs ? Math.round((remSecs / baseSecs) * 100) : 0}%`;
+  document.title = timerId ? `${txt} — Technion Study Hub` : 'Technion Study Hub — חורף תשפ"ז';
+}
+function setTimer(m) { pauseTimer(); baseSecs = m * 60; remSecs = baseSecs; drawTimer(); }
+function startTimer() {
+  if (timerId) return;
+  timerId = setInterval(() => {
+    if (remSecs > 0) { remSecs--; drawTimer(); }
+    else {
+      pauseTimer();
+      if (baseSecs >= 1500) {
+        pomoDone++;
+        storeSet('tech_pomo_done', String(pomoDone));
+        document.getElementById('pomoCount').textContent = pomoDone;
+      }
+      showToast('סשן הפומודורו הסתיים! 🎉');
+    }
+  }, 1000);
+  drawTimer();
+}
+function pauseTimer() { if (timerId) { clearInterval(timerId); timerId = null; drawTimer(); } }
+function resetTimer() { pauseTimer(); remSecs = baseSecs; drawTimer(); }
+drawTimer();
+
+let mistakes = JSON.parse(storeGet('tech_mistakes', '[]'));
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+}
+function renderMistakes() {
+  const el = document.getElementById('mistakeList');
+  el.innerHTML = mistakes.length ? mistakes.map((m, i) => `
+    <div class="mistake-item">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+          <span class="badge badge-alg">${escapeHtml(m.course)}</span>
+          <small class="muted">${escapeHtml(m.date)}</small>
+        </div>
+        <div style="font-weight:700; font-size:14.5px;">${escapeHtml(m.topic)}</div>
+        <div class="muted" style="font-size:13.5px; margin-top:2px;">${escapeHtml(m.lesson)}</div>
+      </div>
+      <button class="btn btn-bad btn-sm" onclick="delMistake(${i})" title="מחק">✕</button>
+    </div>
+  `).join('') : '<p class="muted" style="font-size:13.5px; margin:4px 0 0;">אין עדיין רשומות ביומן הטעויות.</p>';
+}
+function addMistake() {
+  const course = document.getElementById('mCourse').value;
+  const topic = document.getElementById('mTopic').value.trim();
+  const lesson = document.getElementById('mLesson').value.trim();
+  if (!topic || !lesson) { showToast('נא למלא גם נושא וגם לקח'); return; }
+  mistakes.unshift({ course, topic, lesson, date: new Date().toLocaleDateString('he-IL') });
+  storeSet('tech_mistakes', JSON.stringify(mistakes));
+  document.getElementById('mTopic').value = '';
+  document.getElementById('mLesson').value = '';
+  renderMistakes();
+  showToast('נוסף ליומן הטעויות ✓');
+}
+function delMistake(i) {
+  mistakes.splice(i, 1);
+  storeSet('tech_mistakes', JSON.stringify(mistakes));
+  renderMistakes();
+}
+function exportMistakes() {
+  const md = '| תאריך | קורס | נושא | לקח |\n| :--- | :--- | :--- | :--- |\n' + mistakes.map(m => `| ${m.date} | ${m.course} | ${m.topic} | ${m.lesson} |`).join('\n');
+  navigator.clipboard && navigator.clipboard.writeText(md).then(() => showToast('הועתק כ־Markdown ✓')).catch(() => {});
+}
+renderMistakes();
+</script>
+</body>
+</html>
